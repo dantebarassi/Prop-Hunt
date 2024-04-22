@@ -9,10 +9,25 @@ public class PlayerMovementSimple : NetworkBehaviour
 
     private float _moveY;
     private float _moveX;
+    private Rigidbody _rb;
+    public float jumpForce = 4;
+    private bool _jumpPressed;
+    private bool _changeFormPressed;
+    private Vector3 velocity;
+    private MeshRenderer meshRenderer;
+    private Collider collider;
     // Start is called before the first frame update
     void Start()
     {
         
+    }
+
+    public override void Spawned()
+    {
+        //base.Spawned();
+        _rb = GetComponent<Rigidbody>();
+        speed = 15;
+        //var velocity = _rb.velocity;
     }
 
     // Update is called once per frame
@@ -20,11 +35,71 @@ public class PlayerMovementSimple : NetworkBehaviour
     {
         _moveY = Input.GetAxisRaw("Horizontal");
         _moveX = Input.GetAxisRaw("Vertical");
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            _jumpPressed = true;
+        }
+        //Aca hacer el raycast y poner adentro 
+        //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
+        //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            _changeFormPressed = true;
+        }
     }
 
     public override void FixedUpdateNetwork()
     {
-        transform.position += (Vector3.forward * _moveY) * speed * Runner.DeltaTime;
-        transform.position += (Vector3.right * _moveX*-1) * speed * Runner.DeltaTime;
+        //transform.position += (Vector3.forward * _moveY) * speed * Runner.DeltaTime;
+        //transform.position += (Vector3.right * _moveX*-1) * speed * Runner.DeltaTime;
+        //_rb.MovePosition((Vector3.forward * _moveY) * speed * Runner.DeltaTime);
+        //_rb.MovePosition((Vector3.right * _moveX * -1) * speed * Runner.DeltaTime);
+
+        //_rb.velocity += ;
+        if (!HasStateAuthority) return;
+        Movement();
+    }
+
+    public void Movement()
+    {
+        if (_jumpPressed) Jump();
+        if (_changeFormPressed) ChangeForm(meshRenderer,collider);
+
+        if (_moveY != 0 || _moveX != 0)
+        {
+            _rb.velocity += (((Vector3.forward * _moveY) * speed * Runner.DeltaTime) + ((Vector3.right * _moveX * -1) * speed * Runner.DeltaTime)) * -1;
+            if (Mathf.Abs(_rb.velocity.magnitude) > speed)
+            {
+                var velocity = Vector3.ClampMagnitude(_rb.velocity, speed);
+                velocity.y = _rb.velocity.y;
+                _rb.velocity = velocity;
+            }
+        }
+        else
+        {
+            var velocity = _rb.velocity;
+            velocity.x = 0;
+            velocity.z = 0;
+            _rb.velocity = velocity;
+        }
+    }
+
+    public void Jump()
+    {
+        Debug.Log("Jump");
+        var velocity = _rb.velocity;
+        velocity.y += jumpForce;
+        _rb.velocity = velocity;
+        _jumpPressed = false;
+    }
+    public void ChangeForm(MeshRenderer mesh, Collider collider)
+    {
+        Debug.Log("ChangeForm");
+        speed = 0;
+    }
+    public void FinishChangeForm()
+    {
+        speed = 3;
+        _changeFormPressed = false;
     }
 }
