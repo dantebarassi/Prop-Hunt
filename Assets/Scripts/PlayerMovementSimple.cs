@@ -16,6 +16,12 @@ public class PlayerMovementSimple : NetworkBehaviour
     private Vector3 velocity;
     private MeshRenderer meshRenderer;
     private Collider collider;
+
+
+    //Donde va?
+    //Quaternion cameraRotationY = Quaternion.Euler(0, Camera.transform.rotation.eulerAngles.y, 0);
+    //Vector3 move = cameraRotationY * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +32,9 @@ public class PlayerMovementSimple : NetworkBehaviour
     {
         //base.Spawned();
         _rb = GetComponent<Rigidbody>();
+        if (!HasStateAuthority) return;
         speed = 15;
+        Camera.main.GetComponent<CameraBehavior>().target = transform;
         //var velocity = _rb.velocity;
     }
 
