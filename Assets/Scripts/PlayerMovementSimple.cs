@@ -20,7 +20,7 @@ public class PlayerMovementSimple : NetworkBehaviour
     Camera Camera;
     private Renderer _renderer;
 
-    [Networked, OnChangedRender(nameof(NetChangeForm))]
+    //[Networked, OnChangedRender(nameof(NetChangeForm))]
     public MeshRenderer netMeshRenderer { get; set; }
     public Collider netCollider { get; set; }
     public MeshRenderer OtherMeshRenderer;
