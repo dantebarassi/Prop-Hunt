@@ -5,7 +5,7 @@ using Fusion;
 
 public class PlayerMovementSimple : NetworkBehaviour
 {
-    public float speed=3;
+    public float speed = 3;
 
     private float _moveY;
     private float _moveX;
@@ -14,21 +14,26 @@ public class PlayerMovementSimple : NetworkBehaviour
     private bool _jumpPressed;
     private bool _changeFormPressed;
     private Vector3 velocity;
-    private MeshRenderer meshRenderer;
-    private Collider collider;
+
     private Vector3 cameraDir;
     PlayerMovementSimple PlayerMovement;
     Camera Camera;
+    private Renderer _renderer;
 
-
+    [Networked, OnChangedRender(nameof(NetChangeForm))]
+    public MeshRenderer netMeshRenderer { get; set; }
+    public Collider netCollider { get; set; }
+    public MeshRenderer OtherMeshRenderer;
+    public Collider OtherCollider;
     //Donde va?
     //Quaternion cameraRotationY = Quaternion.Euler(0, Camera.transform.rotation.eulerAngles.y, 0);
     //Vector3 move = cameraRotationY * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
-
+    //Lo de aca hace que le avise a todos qeu tiene que cambiar ese variable 
+    public void NetChangeForm() => netMeshRenderer = OtherMeshRenderer;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     public override void Spawned()
@@ -63,7 +68,7 @@ public class PlayerMovementSimple : NetworkBehaviour
         //Raycast
         Ray ray = PlayerMovement.Camera.ScreenPointToRay(Input.mousePosition);
         ray.origin += PlayerMovement.Camera.transform.forward;
-        
+
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             Debug.DrawRay(ray.origin, ray.direction, Color.red, 1f);
@@ -85,7 +90,7 @@ public class PlayerMovementSimple : NetworkBehaviour
     public void Movement()
     {
         if (_jumpPressed) Jump();
-        if (_changeFormPressed) ChangeForm(meshRenderer,collider);
+        if (_changeFormPressed) ChangeForm(OtherMeshRenderer, OtherCollider);
 
         if (_moveY != 0 || _moveX != 0)
         {
