@@ -16,9 +16,6 @@ public class PlayerMovementSimple : NetworkBehaviour
     private Vector3 velocity;
     private MeshRenderer meshRenderer;
     private Collider collider;
-    private Vector3 cameraDir;
-    PlayerMovementSimple PlayerMovement;
-    Camera Camera;
 
 
     //Donde va?
@@ -37,8 +34,6 @@ public class PlayerMovementSimple : NetworkBehaviour
         _rb = GetComponent<Rigidbody>();
         if (!HasStateAuthority) return;
         speed = 15;
-        PlayerMovement = this;
-        Camera = Camera.main;
         Camera.main.GetComponent<CameraBehavior>().target = transform;
         //var velocity = _rb.velocity;
     }
@@ -46,10 +41,9 @@ public class PlayerMovementSimple : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!HasStateAuthority) return;
         _moveY = Input.GetAxisRaw("Horizontal");
         _moveX = Input.GetAxisRaw("Vertical");
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             _jumpPressed = true;
         }
@@ -59,14 +53,6 @@ public class PlayerMovementSimple : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             _changeFormPressed = true;
-        }
-        //Raycast
-        Ray ray = PlayerMovement.Camera.ScreenPointToRay(Input.mousePosition);
-        ray.origin += PlayerMovement.Camera.transform.forward;
-        
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            Debug.DrawRay(ray.origin, ray.direction, Color.red, 1f);
         }
     }
 
@@ -89,13 +75,10 @@ public class PlayerMovementSimple : NetworkBehaviour
 
         if (_moveY != 0 || _moveX != 0)
         {
-            cameraDir = Camera.main.transform.forward;
-            cameraDir.y = 0;
-            this.transform.forward = cameraDir;
-            _rb.velocity += (((this.transform.forward * _moveX) * speed * Runner.DeltaTime) + ((this.transform.right * _moveY) * speed * Runner.DeltaTime));
+            _rb.velocity += (((Vector3.forward * _moveY) * speed * Runner.DeltaTime) + ((Vector3.right * _moveX * -1) * speed * Runner.DeltaTime)) * -1;
             if (Mathf.Abs(_rb.velocity.magnitude) > speed)
             {
-                //var velocity = Vector3.ClampMagnitude(_rb.velocity, speed);
+                var velocity = Vector3.ClampMagnitude(_rb.velocity, speed);
                 velocity.y = _rb.velocity.y;
                 _rb.velocity = velocity;
             }
