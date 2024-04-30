@@ -19,27 +19,30 @@ public class PlayerMovementSimple : NetworkBehaviour
     PlayerMovementSimple PlayerMovement;
     Camera Camera;
     private Renderer _renderer;
-
-    //[Networked, OnChangedRender(nameof(NetChangeForm))]
-    public MeshRenderer netMeshRenderer { get; set; }
-    public Collider netCollider { get; set; }
+    public GameObject thisGameObjectOriginal;
+    [Networked, OnChangedRender(nameof(NetChangeForm))]
+    public int netId { get; set; }
+    public int OtherId;
+    //public MeshRenderer netMeshRenderer { get; set; }
+    //public Collider netCollider { get; set; }
     public MeshRenderer OtherMeshRenderer;
     public Collider OtherCollider;
     //Donde va?
     //Quaternion cameraRotationY = Quaternion.Euler(0, Camera.transform.rotation.eulerAngles.y, 0);
     //Vector3 move = cameraRotationY * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
     //Lo de aca hace que le avise a todos qeu tiene que cambiar ese variable 
-    public void NetChangeForm() => netMeshRenderer = OtherMeshRenderer;
+    public void NetChangeForm() => netId = OtherId;
     // Start is called before the first frame update
     void Start()
     {
-
+        thisGameObjectOriginal = this.gameObject;
     }
 
     public override void Spawned()
     {
         //base.Spawned();
         _rb = GetComponent<Rigidbody>();
+        ResyncNetworckValuesRpc();
         if (!HasStateAuthority) return;
         speed = 15;
         PlayerMovement = this;
@@ -47,8 +50,21 @@ public class PlayerMovementSimple : NetworkBehaviour
         Camera.main.GetComponent<CameraBehavior>().target = transform;
         //var velocity = _rb.velocity;
     }
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    void ResyncNetworckValuesRpc()
+    {
+        StartCoroutine(ResyncValues());
+    }
 
-    // Update is called once per frame
+    IEnumerator ResyncValues()
+    {
+        var id = netId;
+        netId = 0;
+        yield return new WaitForSeconds(0.1f);
+        netId = id;
+    }
+
+
     void Update()
     {
         if (!HasStateAuthority) return;
@@ -61,17 +77,25 @@ public class PlayerMovementSimple : NetworkBehaviour
         //Aca hacer el raycast y poner adentro 
         //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
         //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            _changeFormPressed = true;
-        }
+        
         //Raycast
         Ray ray = PlayerMovement.Camera.ScreenPointToRay(Input.mousePosition);
         ray.origin += PlayerMovement.Camera.transform.forward;
-
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+        Debug.DrawRay(ray.origin, ray.direction, Color.red, 1f);
+        if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
         {
-            Debug.DrawRay(ray.origin, ray.direction, Color.red, 1f);
+            if (hit.transform.TryGetComponent<Objetos>(out var objectHitted))
+            {
+                OtherId = objectHitted.id;
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    OtherCollider = objectHitted.GetComponent<Collider>();
+                    OtherMeshRenderer = objectHitted.GetComponent<MeshRenderer>();
+                    _changeFormPressed = true;
+                }
+            }
+            else
+                OtherId = 0;
         }
     }
 
@@ -125,11 +149,21 @@ public class PlayerMovementSimple : NetworkBehaviour
     public void ChangeForm(MeshRenderer mesh, Collider collider)
     {
         Debug.Log("ChangeForm");
+        MeshRenderer myMesh = this.GetComponent<MeshRenderer>();
+        myMesh = mesh;
         speed = 0;
+        NetChangeForm();
     }
     public void FinishChangeForm()
     {
+        Debug.Log("FinishChangeForm");
         speed = 3;
         _changeFormPressed = false;
+    }
+    public void BackNormal()
+    {
+        Debug.Log("BackNormal");
+        netId = 0;
+        NetChangeForm();
     }
 }
