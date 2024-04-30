@@ -156,9 +156,18 @@ public class PlayerMovementSimple : NetworkBehaviour
         myMesh.mesh = mesh.mesh;
         speed = 0;
         NetChangeForm();
+        StartCoroutine(FinishChangeForm());
     }
-    public void FinishChangeForm()
+    //public void FinishChangeForm()
+    //{
+    //    Debug.Log("FinishChangeForm");
+    //    speed = 3;
+    //    _changeFormPressed = false;
+    //}
+
+    IEnumerator FinishChangeForm()
     {
+        yield return new WaitForSeconds(2f);
         Debug.Log("FinishChangeForm");
         speed = 3;
         _changeFormPressed = false;
