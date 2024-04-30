@@ -151,7 +151,6 @@ GameObject:
   - component: {fileID: 4001340891689628683}
   - component: {fileID: 3117310931969189219}
   - component: {fileID: 1849124040736424598}
-  - component: {fileID: 2426475999223096846}
   m_Layer: 0
   m_Name: Hunter
   m_TagString: Untagged
@@ -210,6 +209,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   jumpForce: 4
+  thisGameObjectOriginal: {fileID: 7162404525741261073}
+  myMesh: {fileID: 5403300947293354903}
+  _netId: 0
+  OtherId: 0
+  OtherMeshRenderer: {fileID: 0}
+  OtherCollider: {fileID: 0}
 --- !u!114 &4001340891689628683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,17 +283,3 @@ MonoBehaviour:
     Position: 0.01
     Rotation: 0.01
     Scale: 0.01
---- !u!114 &2426475999223096846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7162404525741261073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1541381998, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Guid:
-    RawGuidValue: d3a83e574c433d745a81290e1c8c0d88

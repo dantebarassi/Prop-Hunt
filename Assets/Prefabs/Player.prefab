@@ -176,6 +176,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+  jumpForce: 4
+  thisGameObjectOriginal: {fileID: 0}
+  myMesh: {fileID: 8484834429920398282}
+  _netId: 0
+  OtherId: 0
+  OtherMeshRenderer: {fileID: 0}
+  OtherCollider: {fileID: 0}
 --- !u!114 &5186443472318443382
 MonoBehaviour:
   m_ObjectHideFlags: 0

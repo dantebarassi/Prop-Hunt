@@ -20,12 +20,14 @@ public class PlayerMovementSimple : NetworkBehaviour
     Camera Camera;
     private Renderer _renderer;
     public GameObject thisGameObjectOriginal;
+    //[SerializeField] GameObject myVisual;
+    [SerializeField] MeshFilter myMesh;
     [Networked, OnChangedRender(nameof(NetChangeForm))]
     public int netId { get; set; }
     public int OtherId;
     //public MeshRenderer netMeshRenderer { get; set; }
     //public Collider netCollider { get; set; }
-    public MeshRenderer OtherMeshRenderer;
+    public MeshFilter OtherMeshRenderer;
     public Collider OtherCollider;
     //Donde va?
     //Quaternion cameraRotationY = Quaternion.Euler(0, Camera.transform.rotation.eulerAngles.y, 0);
@@ -36,6 +38,7 @@ public class PlayerMovementSimple : NetworkBehaviour
     void Start()
     {
         thisGameObjectOriginal = this.gameObject;
+        //myMesh = myVisual.gameObject.GetComponent<MeshFilter>();
     }
 
     public override void Spawned()
@@ -90,7 +93,7 @@ public class PlayerMovementSimple : NetworkBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     OtherCollider = objectHitted.GetComponent<Collider>();
-                    OtherMeshRenderer = objectHitted.GetComponent<MeshRenderer>();
+                    OtherMeshRenderer = objectHitted.GetComponent<MeshFilter>();
                     _changeFormPressed = true;
                 }
             }
@@ -146,11 +149,11 @@ public class PlayerMovementSimple : NetworkBehaviour
         _rb.velocity = velocity;
         _jumpPressed = false;
     }
-    public void ChangeForm(MeshRenderer mesh, Collider collider)
+    public void ChangeForm(MeshFilter mesh, Collider collider)
     {
         Debug.Log("ChangeForm");
-        MeshRenderer myMesh = this.GetComponent<MeshRenderer>();
-        myMesh = mesh;
+        
+        myMesh.mesh = mesh.mesh;
         speed = 0;
         NetChangeForm();
     }
