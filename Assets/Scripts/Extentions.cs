@@ -8,4 +8,9 @@ public static class Extentions
     {
         return new Vector3(xValue, vector.y, vector.z);
     }
+    public static Vector3 SetY0(this Vector3 vector)
+    {
+        vector.y = 0;
+        return vector;
+    }
 }

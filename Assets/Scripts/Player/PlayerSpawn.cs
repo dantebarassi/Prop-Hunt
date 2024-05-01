@@ -12,18 +12,19 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
     public void PlayerJoined(PlayerRef player)
     {
         //Esto para saber si es el cliente local que se esta conectando para que pase solo esa vez
-        if(player == Runner.LocalPlayer)
+        if (player == Runner.LocalPlayer)
         {
-            if(count ==0)
-            {
-                Runner.Spawn(_hunterPrefab, Vector3.zero, Quaternion.identity);
-            }
-            else
-            {
-                //Aca lo spawneo
-                Runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity);
-            }
-            count++; 
+            Runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity);
+            //if (count ==0)
+            //{
+            //    Runner.Spawn(_hunterPrefab, Vector3.zero, Quaternion.identity);
+            //}
+            //else
+            //{
+            //    //Aca lo spawneo
+            //    Runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity);
+            //}
+            //count++; 
         }
     }
 }

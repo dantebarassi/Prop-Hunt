@@ -10,15 +10,21 @@ public class PlayerMovementSimple : NetworkBehaviour
 
     private float _moveY;
     private float _moveX;
-    private Rigidbody _rb;
+    public Rigidbody _rb { get; private set; }
     public float jumpForce = 4;
     private bool _jumpPressed;
-    private bool _changeFormPressed;
+    public bool _changeFormPressed { get; private set; }
     private Vector3 velocity;
 
     private Vector3 cameraDir;
     PlayerMovementSimple PlayerMovement;
     Camera Camera;
+
+    public PlayerView playerView;
+
+
+    //Mover todo esto a player view
+
     private Renderer _renderer;
     public GameObject thisGameObjectOriginal;
     //[SerializeField] GameObject myVisual;
@@ -34,7 +40,12 @@ public class PlayerMovementSimple : NetworkBehaviour
     //Quaternion cameraRotationY = Quaternion.Euler(0, Camera.transform.rotation.eulerAngles.y, 0);
     //Vector3 move = cameraRotationY * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
     //Lo de aca hace que le avise a todos qeu tiene que cambiar ese variable 
-    public void NetChangeForm() => netId = OtherId;
+    public void NetChangeForm()
+    {
+        netId = OtherId;
+        //OtherMeshRenderer = GameManager.instance.Object[netId].gameObject
+        _changeFormPressed = true;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -51,7 +62,9 @@ public class PlayerMovementSimple : NetworkBehaviour
             ResyncNetworckValuesRpc();
             return;
         }
+        
         LocalPlayer = this;
+        playerView = GetComponentInChildren<PlayerView>();
         speed = 15;
         PlayerMovement = this;
         Camera = Camera.main;
