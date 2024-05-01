@@ -147,7 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2870414941236247062}
   - component: {fileID: 2872470722396745642}
-  - component: {fileID: 8233071375788666786}
+  - component: {fileID: 3868162344301771451}
   - component: {fileID: 4001340891689628683}
   - component: {fileID: 3117310931969189219}
   - component: {fileID: 1849124040736424598}
@@ -195,7 +195,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8233071375788666786
+--- !u!114 &3868162344301771451
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -204,17 +204,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7162404525741261073}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12606dfe9e0199443b86ddd0036858c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 8739a732d71ad8f4a917762a9c8609d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
   jumpForce: 4
-  thisGameObjectOriginal: {fileID: 7162404525741261073}
-  myMesh: {fileID: 5403300947293354903}
-  _netId: 0
-  OtherId: 0
-  OtherMeshRenderer: {fileID: 0}
-  OtherCollider: {fileID: 0}
+  Damage: 10
 --- !u!114 &4001340891689628683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,7 +227,7 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 8233071375788666786}
+  - {fileID: 3868162344301771451}
   - {fileID: 1849124040736424598}
 --- !u!54 &3117310931969189219
 Rigidbody:

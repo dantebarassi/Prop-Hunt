@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 
-public class PlayerMovementSimple : NetworkBehaviour
+public class Hunter : NetworkBehaviour
 {
-    public static PlayerMovementSimple LocalPlayer { get; private set; }
+    public static Hunter LocalPlayer { get; private set; }
     public float speed = 3;
 
     private float _moveY;
@@ -13,32 +13,17 @@ public class PlayerMovementSimple : NetworkBehaviour
     private Rigidbody _rb;
     public float jumpForce = 4;
     private bool _jumpPressed;
-    private bool _changeFormPressed;
     private Vector3 velocity;
-
+    Hunter hunter;
     private Vector3 cameraDir;
-    PlayerMovementSimple PlayerMovement;
     Camera Camera;
     private Renderer _renderer;
-    public GameObject thisGameObjectOriginal;
-    //[SerializeField] GameObject myVisual;
-    [SerializeField] MeshFilter myMesh;
-    [Networked, OnChangedRender(nameof(NetChangeForm))]
-    public int netId { get; set; }
-    public int OtherId;
-    //public MeshRenderer netMeshRenderer { get; set; }
-    //public Collider netCollider { get; set; }
-    public MeshFilter OtherMeshRenderer;
-    public Collider OtherCollider;
-    //Donde va?
-    //Quaternion cameraRotationY = Quaternion.Euler(0, Camera.transform.rotation.eulerAngles.y, 0);
-    //Vector3 move = cameraRotationY * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
-    //Lo de aca hace que le avise a todos qeu tiene que cambiar ese variable 
-    public void NetChangeForm() => netId = OtherId;
+    public float Damage = 40;
+    public bool attack=false;
+
     // Start is called before the first frame update
     void Start()
     {
-        thisGameObjectOriginal = this.gameObject;
         //myMesh = myVisual.gameObject.GetComponent<MeshFilter>();
     }
 
@@ -48,29 +33,29 @@ public class PlayerMovementSimple : NetworkBehaviour
         _rb = GetComponent<Rigidbody>();
         if (!HasStateAuthority)
         {
-            ResyncNetworckValuesRpc();
+            //ResyncNetworckValuesRpc();
             return;
         }
         LocalPlayer = this;
+        hunter = this;
         speed = 15;
-        PlayerMovement = this;
         Camera = Camera.main;
         Camera.main.GetComponent<CameraBehavior>().target = transform;
         //var velocity = _rb.velocity;
     }
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    void ResyncNetworckValuesRpc()
-    {
-        StartCoroutine(ResyncValues());
-    }
-
-    IEnumerator ResyncValues()
-    {
-        var id = netId;
-        netId = 0;
-        yield return new WaitForSeconds(0.1f);
-        netId = id;
-    }
+    //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    //void ResyncNetworckValuesRpc()
+    //{
+    //    StartCoroutine(ResyncValues());
+    //}
+    //
+    //IEnumerator ResyncValues()
+    //{
+    //    var id = netId;
+    //    netId = 0;
+    //    yield return new WaitForSeconds(0.1f);
+    //    netId = id;
+    //}
 
 
     void Update()
@@ -85,25 +70,30 @@ public class PlayerMovementSimple : NetworkBehaviour
         //Aca hacer el raycast y poner adentro 
         //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
         //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
-        
-        //Raycast
-        Ray ray = PlayerMovement.Camera.ScreenPointToRay(Input.mousePosition);
-        ray.origin += PlayerMovement.Camera.transform.forward;
-        Debug.DrawRay(ray.origin, ray.direction, Color.red, 1f);
-        if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
+        if(!attack)
         {
-            if (hit.transform.TryGetComponent<Objetos>(out var objectHitted))
+            //Raycast
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                OtherId = objectHitted.id;
-                if (Input.GetKeyDown(KeyCode.E))
+                attack = true;
+                Ray ray = hunter.Camera.ScreenPointToRay(Input.mousePosition);
+                ray.origin += hunter.Camera.transform.forward;
+                Debug.DrawRay(ray.origin, ray.direction, Color.red, 5f);
+                if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
                 {
-                    OtherCollider = objectHitted.GetComponent<Collider>();
-                    OtherMeshRenderer = objectHitted.GetComponent<MeshFilter>();
-                    _changeFormPressed = true;
+                    if (hit.transform.TryGetComponent<Healt>(out var health))
+                    {
+                        health.DealDamageRpc(Damage);
+                    }
                 }
             }
-            else
-                OtherId = 0;
+        }
+        else
+        {
+            float countToAttack = 0;
+            countToAttack += Runner.DeltaTime;
+            if (countToAttack >= 6)
+                attack = false;
         }
     }
 
@@ -122,7 +112,6 @@ public class PlayerMovementSimple : NetworkBehaviour
     public void Movement()
     {
         if (_jumpPressed) Jump();
-        if (_changeFormPressed) ChangeForm(OtherMeshRenderer, OtherCollider);
 
         if (_moveY != 0 || _moveX != 0)
         {
@@ -153,34 +142,5 @@ public class PlayerMovementSimple : NetworkBehaviour
         velocity.y += jumpForce;
         _rb.velocity = velocity;
         _jumpPressed = false;
-    }
-    public void ChangeForm(MeshFilter mesh, Collider collider)
-    {
-        Debug.Log("ChangeForm");
-        
-        myMesh.mesh = mesh.mesh;
-        speed = 0;
-        NetChangeForm();
-        StartCoroutine(FinishChangeForm());
-    }
-    //public void FinishChangeForm()
-    //{
-    //    Debug.Log("FinishChangeForm");
-    //    speed = 3;
-    //    _changeFormPressed = false;
-    //}
-
-    IEnumerator FinishChangeForm()
-    {
-        yield return new WaitForSeconds(2f);
-        Debug.Log("FinishChangeForm");
-        speed = 15;
-        _changeFormPressed = false;
-    }
-    public void BackNormal()
-    {
-        Debug.Log("BackNormal");
-        netId = 0;
-        NetChangeForm();
     }
 }

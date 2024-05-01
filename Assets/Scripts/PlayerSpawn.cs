@@ -7,7 +7,7 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
 {
     [SerializeField] GameObject _playerPrefab;
     [SerializeField] GameObject _hunterPrefab;
-    private int count=0;
+    public int count=0;
     //Siempre se va a ejecutar cuando alguien se una, y esta funcion da toda la data del que se unio
     public void PlayerJoined(PlayerRef player)
     {

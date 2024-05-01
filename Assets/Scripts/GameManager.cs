@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class GameManager : MonoBehaviour
+using Fusion;
+public class GameManager : NetworkBehaviour
 {
     public Dictionary<int,GameObject> Objetos;
     public static GameManager instance;
+    public int playerCount;
     void Awake()
     {
         if (instance == null)

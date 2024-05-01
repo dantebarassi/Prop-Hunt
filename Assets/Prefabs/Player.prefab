@@ -115,6 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3081949489103740910}
   - component: {fileID: 4600656883296919350}
+  - component: {fileID: 1378634758624008389}
   - component: {fileID: 3042175867827451418}
   - component: {fileID: 5186443472318443382}
   - component: {fileID: -8909164490585069064}
@@ -163,6 +164,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1378634758624008389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6436676858233754199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 282aed1c858cac7438b40e4578c9e292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _NetworkedHealth: 100
 --- !u!114 &3042175867827451418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,7 +192,7 @@ MonoBehaviour:
   speed: 2
   jumpForce: 4
   thisGameObjectOriginal: {fileID: 0}
-  myMesh: {fileID: 8484834429920398282}
+  myMesh: {fileID: 6636615033838337423}
   _netId: 0
   OtherId: 0
   OtherMeshRenderer: {fileID: 0}
@@ -200,6 +214,7 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 1378634758624008389}
   - {fileID: 3042175867827451418}
   - {fileID: 1799555980207038575}
 --- !u!54 &-8909164490585069064
