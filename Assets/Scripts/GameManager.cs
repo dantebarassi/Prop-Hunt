@@ -6,7 +6,9 @@ public class GameManager : NetworkBehaviour
 {
     public Dictionary<int,GameObject> Objetos;
     public static GameManager instance;
-    public int playerCount;
+    [Networked, OnChangedRender(nameof(NetChangePlayers))]
+    public int netPlayerCount { get; set; }
+    public int playerCount=0;
     void Awake()
     {
         if (instance == null)
@@ -28,7 +30,7 @@ public class GameManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void FillWithObjects(int idTryEntry, GameObject objectsTryEntry)
     {
@@ -39,4 +41,9 @@ public class GameManager : NetworkBehaviour
         }
             
     }
+    public void NetChangePlayers() => playerCount = netPlayerCount;
+    
+        
+
+    
 }
