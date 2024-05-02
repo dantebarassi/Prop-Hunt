@@ -9,8 +9,7 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
     [SerializeField] GameObject _playerPrefab;
     [SerializeField] GameObject _hunterPrefab;
     public int count=0;
-    [Networked]
-    private bool needHunter{get; set;}
+
     //Siempre se va a ejecutar cuando alguien se una, y esta funcion da toda la data del que se unio
     public void PlayerJoined(PlayerRef player)
     {
@@ -37,6 +36,5 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
             //Cursor.lockState = CursorLockMode.Locked;
             //Runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity);
         }
-        
     }
 }
