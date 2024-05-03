@@ -67,10 +67,16 @@ public class Hunter : NetworkBehaviour
         {
             _jumpPressed = true;
         }
+        if(NetworkActivePlayers < 1)
+        {
+            Time.timeScale = 0f;
+        }
+        else
+            Time.timeScale = 1f;
         //Aca hacer el raycast y poner adentro 
         //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
         //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
-        if(!attack)
+        if (!attack)
         {
             //Raycast
             if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -142,5 +148,19 @@ public class Hunter : NetworkBehaviour
         velocity.y += jumpForce;
         _rb.velocity = velocity;
         _jumpPressed = false;
+    }
+    [Networked, OnChangedRender(nameof(activePlayers))]
+    public float NetworkActivePlayers { get; set; }
+
+    void activePlayers()
+    {
+        Debug.Log(NetworkActivePlayers);
+    }
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RpcPlayerJoin()
+    {
+        // The code inside here will run on the client which owns this object (has state and input authority).
+        //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
+        NetworkActivePlayers ++;
     }
 }

@@ -31,6 +31,8 @@ public class PlayerMovementSimple : NetworkBehaviour
     [SerializeField] MeshFilter myMesh;
     [Networked, OnChangedRender(nameof(NetChangeForm))]
     public int netId { get; set; }
+    [Networked, OnChangedRender(nameof(NetChangeForm))]
+    public bool alreadyPlayer { get; set; }
     public int OtherId;
     //public MeshRenderer netMeshRenderer { get; set; }
     //public Collider netCollider { get; set; }
@@ -81,6 +83,7 @@ public class PlayerMovementSimple : NetworkBehaviour
     {
         var id = netId;
         netId = 0;
+        FindObjectOfType<Hunter>().RpcPlayerJoin();
         yield return new WaitForSeconds(0.1f);
         netId = id;
     }
