@@ -8,6 +8,7 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
 {
     [SerializeField] GameObject _playerPrefab;
     [SerializeField] GameObject _hunterPrefab;
+    [SerializeField] Transform[] _spawnPoints;
     public int count=0;
 
     //Siempre se va a ejecutar cuando alguien se una, y esta funcion da toda la data del que se unio
@@ -22,14 +23,14 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
             {
                 Debug.Log("Hunter");
                 Cursor.lockState = CursorLockMode.Locked;
-                Runner.Spawn(_hunterPrefab, Vector3.zero, Quaternion.identity);
+                Runner.Spawn(_hunterPrefab, _spawnPoints[0].transform.position, Quaternion.identity);
             }
             else if (Runner.ActivePlayers.ToList().Count > 1)
             {
                 Debug.Log("Player");
                 //Aca lo spawneo
                 Cursor.lockState = CursorLockMode.Locked;
-                Runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity);
+                Runner.Spawn(_playerPrefab, _spawnPoints[Random.Range(1,_spawnPoints.Length-1)].transform.position, Quaternion.identity);
             }
             //Debug.Log(Runner.ActivePlayers.ToList().Count);
             //Debug.LogWarning("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
