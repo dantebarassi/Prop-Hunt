@@ -40,5 +40,9 @@ public class GameManager : NetworkBehaviour
         }
             
     }
+    public GameObject MeshSelector(int Id)
+    {
+        return Objetos.GetValueOrDefault(Id);
+    }
 
 }

@@ -31,8 +31,6 @@ public class PlayerMovementSimple : NetworkBehaviour
     [SerializeField] MeshFilter myMesh;
     [Networked, OnChangedRender(nameof(NetChangeForm))]
     public int netId { get; set; }
-    [Networked, OnChangedRender(nameof(NetChangeForm))]
-    public bool alreadyPlayer { get; set; }
     public int OtherId;
     //public MeshRenderer netMeshRenderer { get; set; }
     //public Collider netCollider { get; set; }
@@ -44,10 +42,10 @@ public class PlayerMovementSimple : NetworkBehaviour
     //Lo de aca hace que le avise a todos qeu tiene que cambiar ese variable 
     public void NetChangeForm()
     {
-        netId = OtherId;
-        //OtherMeshRenderer = GameManager.instance.Object[netId].gameObject
-        _changeFormPressed = true;
+        OtherMeshRenderer = GameManager.instance.MeshSelector(netId).GetComponent<MeshFilter>();
+        ChangeForm(OtherMeshRenderer, OtherCollider);
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -113,6 +111,7 @@ public class PlayerMovementSimple : NetworkBehaviour
                 OtherId = objectHitted.id;
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    netId = OtherId;
                     OtherCollider = objectHitted.GetComponent<Collider>();
                     OtherMeshRenderer = objectHitted.GetComponent<MeshFilter>();
                     _changeFormPressed = true;
@@ -176,7 +175,7 @@ public class PlayerMovementSimple : NetworkBehaviour
         
         myMesh.mesh = mesh.mesh;
         speed = 0;
-        NetChangeForm();
+        //NetChangeForm();
         StartCoroutine(FinishChangeForm());
     }
     //public void FinishChangeForm()

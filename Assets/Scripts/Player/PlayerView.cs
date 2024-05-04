@@ -7,11 +7,15 @@ public class PlayerView : NetworkBehaviour
 {
     private Renderer _renderer;
     Animator _animator;
-
+    public static PlayerView Local { get; private set; }
     
 
     public override void Spawned()
     {
+        if(HasStateAuthority)
+        {
+            Local = this;
+        }
         _renderer = GetComponentInChildren<Renderer>();
         _animator = GetComponentInChildren<Animator>();
     }
