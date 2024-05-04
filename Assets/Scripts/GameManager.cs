@@ -6,10 +6,17 @@ using System.Linq;
 
 public class GameManager : NetworkBehaviour
 {
+    public int playersActive;
+
+    public Hunter hunter;
+    public List<PlayerMovementSimple> playerMovements = new();
+
+    //[Networked, OnChangedRender(nameof(StartGame))]
+    public bool startGame { get; set; } = false;
     public Dictionary<int,GameObject> Objetos;
     public static GameManager instance;
-    [Networked, OnChangedRender(nameof(WhoWins))]
-    public int kills { get; set; }
+    
+    public float timer=0;
     void Awake()
     {
         if (instance == null)
@@ -23,15 +30,12 @@ public class GameManager : NetworkBehaviour
         }
         Objetos = new Dictionary<int, GameObject>();
     }
-    void Start()
+    private void Update()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //if (startGame)
+        //    timer += Runner.DeltaTime;
+        //if(timer >= 60f)
+        //    UIManager.instance.SetVictoryScreen(playerMovements.First().gameObject);
     }
     public void FillWithObjects(int idTryEntry, GameObject objectsTryEntry)
     {
@@ -46,5 +50,22 @@ public class GameManager : NetworkBehaviour
     {
         return Objetos.GetValueOrDefault(Id);
     }
-    public void WhoWins() => Debug.Log(kills);
+    //public void WhoWins() => Debug.Log(kills);
+    //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    //public void RpcHunterGetKill()
+    //{
+    //    // The code inside here will run on the client which owns this object (has state and input authority).
+    //    //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
+    //    kills++;
+    //    if (kills >= 4)
+    //        UIManager.instance.SetVictoryScreen(hunter.gameObject);
+    //}
+    //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    //public void RpcStartGame()
+    //{
+    //    // The code inside here will run on the client which owns this object (has state and input authority).
+    //    //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
+    //    startGame=true;
+    //}
+    //public void StartGame() => Debug.Log("STAAAART");
 }

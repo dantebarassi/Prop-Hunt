@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using System.Linq;
 
 public class Hunter : NetworkBehaviour
 {
@@ -20,7 +21,11 @@ public class Hunter : NetworkBehaviour
     private Renderer _renderer;
     public float Damage = 40;
     public bool attack=false;
-
+    float countToAttack = 0;
+    bool hunterCan = false;
+    [Networked, OnChangedRender(nameof(WhoWins))]
+    public int kills { get; set; }
+    public float timer = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +36,7 @@ public class Hunter : NetworkBehaviour
     {
         //base.Spawned();
         _rb = GetComponent<Rigidbody>();
+        GameManager.instance.hunter = this;
         if (!HasStateAuthority)
         {
             //ResyncNetworckValuesRpc();
@@ -61,45 +67,53 @@ public class Hunter : NetworkBehaviour
     void Update()
     {
         if (!HasStateAuthority) return;
-        _moveY = Input.GetAxisRaw("Horizontal");
-        _moveX = Input.GetAxisRaw("Vertical");
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Runner.ActivePlayers.Count() < 2)
         {
-            _jumpPressed = true;
-        }
-        if(NetworkActivePlayers < 1)
-        {
-            Time.timeScale = 0f;
+            hunterCan = false;
+            UIManager.instance.HunterWait();
         }
         else
-            Time.timeScale = 1f;
-        //Aca hacer el raycast y poner adentro 
-        //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
-        //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
-        if (!attack)
         {
-            //Raycast
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if(!hunterCan)
+                StartCoroutine(HunterCanMove());
+        }
+        if (hunterCan)
+        {
+            _moveY = Input.GetAxisRaw("Horizontal");
+            _moveX = Input.GetAxisRaw("Vertical");
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                attack = true;
-                Ray ray = hunter.Camera.ScreenPointToRay(Input.mousePosition);
-                ray.origin += hunter.Camera.transform.forward;
-                Debug.DrawRay(ray.origin, ray.direction, Color.red, 5f);
-                if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
+                _jumpPressed = true;
+            }
+            
+            //Aca hacer el raycast y poner adentro 
+            //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
+            //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
+            if (!attack)
+            {
+                //Raycast
+                if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    if (hit.transform.TryGetComponent<Healt>(out var health))
+                    attack = true;
+                    countToAttack = 0;
+                    Ray ray = hunter.Camera.ScreenPointToRay(Input.mousePosition);
+                    ray.origin += hunter.Camera.transform.forward;
+                    Debug.DrawRay(ray.origin, ray.direction, Color.red, 5f);
+                    if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
                     {
-                        health.DealDamageRpc(Damage);
+                        if (hit.transform.TryGetComponent<Healt>(out var health))
+                        {
+                            health.DealDamageRpc(Damage,this);
+                        }
                     }
                 }
             }
-        }
-        else
-        {
-            float countToAttack = 0;
-            countToAttack += Runner.DeltaTime;
-            if (countToAttack >= 6)
-                attack = false;
+            else
+            {
+                countToAttack += Runner.DeltaTime;
+                if (countToAttack >= 2f)
+                    attack = false;
+            }
         }
     }
 
@@ -112,6 +126,13 @@ public class Hunter : NetworkBehaviour
 
         //_rb.velocity += ;
         if (!HasStateAuthority) return;
+        if(hunterCan)
+        {
+            timer += Runner.DeltaTime;
+            Debug.Log(timer);
+            if (timer >= 60f)
+                UIManager.instance.SetVictoryScreen();
+        }
         Movement();
     }
 
@@ -149,18 +170,37 @@ public class Hunter : NetworkBehaviour
         _rb.velocity = velocity;
         _jumpPressed = false;
     }
-    [Networked, OnChangedRender(nameof(activePlayers))]
-    public float NetworkActivePlayers { get; set; }
+    //[Networked, OnChangedRender(nameof(activePlayers))]
+    //public float NetworkActivePlayers { get; set; }
+    //
+    //void activePlayers()
+    //{
+    //    Debug.Log(NetworkActivePlayers);
+    //}
+    //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    //public void RpcPlayerJoin()
+    //{
+    //    // The code inside here will run on the client which owns this object (has state and input authority).
+    //    //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
+    //    NetworkActivePlayers ++;
+    //}
 
-    void activePlayers()
+    IEnumerator HunterCanMove()
     {
-        Debug.Log(NetworkActivePlayers);
+        yield return new WaitForSeconds(10f);
+        Debug.Log("StartMoveHunter");
+        //velocity = 0f;
+        hunterCan = true;
+        UIManager.instance.HunterStart();
     }
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RpcPlayerJoin()
+    public void RpcHunterGetKill()
     {
         // The code inside here will run on the client which owns this object (has state and input authority).
         //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
-        NetworkActivePlayers ++;
+        kills++;
+        if (kills >= 4)
+            UIManager.instance.SetVictoryScreen(this.gameObject);
     }
+    public void WhoWins() => Debug.Log(kills);
 }

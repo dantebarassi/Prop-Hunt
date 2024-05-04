@@ -57,12 +57,12 @@ public class PlayerMovementSimple : NetworkBehaviour
     {
         //base.Spawned();
         _rb = GetComponent<Rigidbody>();
+        GameManager.instance.playerMovements.Add(this);
         if (!HasStateAuthority)
         {
             ResyncNetworckValuesRpc();
             return;
         }
-        
         LocalPlayer = this;
         playerView = GetComponentInChildren<PlayerView>();
         speed = 15;
@@ -81,7 +81,6 @@ public class PlayerMovementSimple : NetworkBehaviour
     {
         var id = netId;
         netId = 0;
-        FindObjectOfType<Hunter>().RpcPlayerJoin();
         yield return new WaitForSeconds(0.1f);
         netId = id;
     }

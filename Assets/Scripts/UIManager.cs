@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI _victoryMeshTMP;
     private GameObject _victoryTextObject;
+    [SerializeField] Image _hunterWait;
+    [SerializeField] TextMeshProUGUI _hunterWaitTMP;
     private void Awake()
     {
         if (instance == null) instance = this;
@@ -24,6 +27,22 @@ public class UIManager : MonoBehaviour
     public void SetVictoryScreen(GameObject winner)
     {
         _victoryTextObject.SetActive(true);
-        _victoryMeshTMP.text = winner.GetComponent<Healt>() == null ? "El hunter Wins" : "Los Objetos Wins";
+        //_victoryMeshTMP.text = winner.GetComponent<Hunter>() != null ? "El hunter Wins" : "Los Objetos Wins";
+        _victoryMeshTMP.text =  "El hunter Wins";
+    }
+    public void SetVictoryScreen()
+    {
+        _victoryTextObject.SetActive(true);
+        _victoryMeshTMP.text = "Los Objetos Wins";
+    }
+    public void HunterWait()
+    {
+        _hunterWait.gameObject.SetActive(true);
+        _hunterWaitTMP.gameObject.SetActive(true);
+    }
+    public void HunterStart()
+    {
+        _hunterWait.gameObject.SetActive(false);
+        _hunterWaitTMP.gameObject.SetActive(false);
     }
 }
