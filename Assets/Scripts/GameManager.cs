@@ -8,6 +8,8 @@ public class GameManager : NetworkBehaviour
 {
     public Dictionary<int,GameObject> Objetos;
     public static GameManager instance;
+    [Networked, OnChangedRender(nameof(WhoWins))]
+    public int kills { get; set; }
     void Awake()
     {
         if (instance == null)
@@ -44,5 +46,5 @@ public class GameManager : NetworkBehaviour
     {
         return Objetos.GetValueOrDefault(Id);
     }
-
+    public void WhoWins() => Debug.Log(kills);
 }

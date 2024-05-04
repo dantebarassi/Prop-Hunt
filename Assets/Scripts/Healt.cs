@@ -17,6 +17,18 @@ public class Healt : NetworkBehaviour
     {
         // The code inside here will run on the client which owns this object (has state and input authority).
         Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
-        NetworkedHealth -= damage;
+        if(NetworkedHealth - damage > 0)
+        {
+            NetworkedHealth -= damage;
+        }
+        else
+        {
+            //Poner en modo espectador y decir que mori
+            //Quiza mandar al gamemanager que si muero sumar uno y si se llega a tanto tiempo ganan los que se esconden
+            //FindObjectOfType<Hunter>().RpcPlayerJoin();
+            GameManager.instance.kills++;
+            if (GameManager.instance.kills >= 4)
+                UIManager.instance.SetVictoryScreen(this.gameObject);
+        }
     }
 }
