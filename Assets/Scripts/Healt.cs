@@ -7,7 +7,7 @@ public class Healt : NetworkBehaviour
 {
     [Networked, OnChangedRender(nameof(HealthChanged))]
     public float NetworkedHealth { get; set; } = 100;
-
+    
     void HealthChanged()
     {
         Debug.Log($"Health changed to: {NetworkedHealth}");
@@ -28,6 +28,7 @@ public class Healt : NetworkBehaviour
             //FindObjectOfType<Hunter>().RpcPlayerJoin();
             NetworkedHealth -= damage;
             hunter.RpcHunterGetKill();
+            this.gameObject.GetComponent<PlayerMovementSimple>().transform.position = GameManager.instance.deadPlace.transform.position;
             GameManager.instance.SetPlayerSpectating(this.gameObject.GetComponent<PlayerMovementSimple>());
         }
     }

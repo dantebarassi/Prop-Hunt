@@ -15,6 +15,8 @@ public class GameManager : NetworkBehaviour
     public bool startGame { get; set; } = false;
     public Dictionary<int,GameObject> Objetos;
     public static GameManager instance;
+
+    [SerializeField] public GameObject deadPlace;
     
     public float timer=0;
     void Awake()
