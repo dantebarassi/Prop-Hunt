@@ -199,7 +199,7 @@ public class Hunter : NetworkBehaviour
         // The code inside here will run on the client which owns this object (has state and input authority).
         //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
         kills++;
-        if (kills >= Runner.ActivePlayers.Count())
+        if (kills >= Runner.ActivePlayers.Count()-1)
             UIManager.instance.SetVictoryScreen(this.gameObject);
     }
     public void WhoWins() => Debug.Log(kills);
