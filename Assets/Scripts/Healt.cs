@@ -28,6 +28,7 @@ public class Healt : NetworkBehaviour
             //FindObjectOfType<Hunter>().RpcPlayerJoin();
             NetworkedHealth -= damage;
             hunter.RpcHunterGetKill();
+            GameManager.instance.SetPlayerSpectating(this.gameObject.GetComponent<PlayerMovementSimple>());
         }
     }
 }

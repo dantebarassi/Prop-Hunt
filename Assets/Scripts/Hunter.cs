@@ -129,8 +129,8 @@ public class Hunter : NetworkBehaviour
         if(hunterCan)
         {
             timer += Runner.DeltaTime;
-            Debug.Log(timer);
-            if (timer >= 60f)
+            //Debug.Log(timer);
+            if (timer >= 600f)
                 UIManager.instance.SetVictoryScreen();
         }
         Movement();
@@ -188,7 +188,7 @@ public class Hunter : NetworkBehaviour
     IEnumerator HunterCanMove()
     {
         yield return new WaitForSeconds(10f);
-        Debug.Log("StartMoveHunter");
+        //Debug.Log("StartMoveHunter");
         //velocity = 0f;
         hunterCan = true;
         UIManager.instance.HunterStart();
@@ -199,7 +199,7 @@ public class Hunter : NetworkBehaviour
         // The code inside here will run on the client which owns this object (has state and input authority).
         //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
         kills++;
-        if (kills >= 4)
+        if (kills >= Runner.ActivePlayers.Count())
             UIManager.instance.SetVictoryScreen(this.gameObject);
     }
     public void WhoWins() => Debug.Log(kills);

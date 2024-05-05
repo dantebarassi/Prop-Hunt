@@ -50,6 +50,12 @@ public class GameManager : NetworkBehaviour
     {
         return Objetos.GetValueOrDefault(Id);
     }
+    public void SetPlayerSpectating(PlayerMovementSimple playerMovementSimple)
+    {
+        FindObjectOfType<CameraBehavior>().SetSpectating();
+        playerMovementSimple.SetInputsAllowed(false);
+    }
+
     //public void WhoWins() => Debug.Log(kills);
     //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     //public void RpcHunterGetKill()

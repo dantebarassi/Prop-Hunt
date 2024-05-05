@@ -36,6 +36,7 @@ public class PlayerMovementSimple : NetworkBehaviour
     //public Collider netCollider { get; set; }
     public MeshFilter OtherMeshRenderer;
     public Collider OtherCollider;
+    public bool inpusAllowed=true;
     //Donde va?
     //Quaternion cameraRotationY = Quaternion.Euler(0, Camera.transform.rotation.eulerAngles.y, 0);
     //Vector3 move = cameraRotationY * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
@@ -89,35 +90,38 @@ public class PlayerMovementSimple : NetworkBehaviour
     void Update()
     {
         if (!HasStateAuthority) return;
-        _moveY = Input.GetAxisRaw("Horizontal");
-        _moveX = Input.GetAxisRaw("Vertical");
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(inpusAllowed)
         {
-            _jumpPressed = true;
-        }
-        //Aca hacer el raycast y poner adentro 
-        //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
-        //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
-        
-        //Raycast
-        Ray ray = PlayerMovement.Camera.ScreenPointToRay(Input.mousePosition);
-        ray.origin += PlayerMovement.Camera.transform.forward;
-        Debug.DrawRay(ray.origin, ray.direction, Color.red, 1f);
-        if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
-        {
-            if (hit.transform.TryGetComponent<Objetos>(out var objectHitted))
+            _moveY = Input.GetAxisRaw("Horizontal");
+            _moveX = Input.GetAxisRaw("Vertical");
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                OtherId = objectHitted.id;
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    netId = OtherId;
-                    OtherCollider = objectHitted.GetComponent<Collider>();
-                    OtherMeshRenderer = objectHitted.GetComponent<MeshFilter>();
-                    _changeFormPressed = true;
-                }
+                _jumpPressed = true;
             }
-            else
-                OtherId = 0;
+            //Aca hacer el raycast y poner adentro 
+            //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
+            //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
+
+            //Raycast
+            Ray ray = PlayerMovement.Camera.ScreenPointToRay(Input.mousePosition);
+            ray.origin += PlayerMovement.Camera.transform.forward;
+            Debug.DrawRay(ray.origin, ray.direction, Color.red, 1f);
+            if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
+            {
+                if (hit.transform.TryGetComponent<Objetos>(out var objectHitted))
+                {
+                    OtherId = objectHitted.id;
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        netId = OtherId;
+                        OtherCollider = objectHitted.GetComponent<Collider>();
+                        OtherMeshRenderer = objectHitted.GetComponent<MeshFilter>();
+                        _changeFormPressed = true;
+                    }
+                }
+                else
+                    OtherId = 0;
+            }
         }
     }
 
@@ -196,5 +200,9 @@ public class PlayerMovementSimple : NetworkBehaviour
         Debug.Log("BackNormal");
         netId = 0;
         NetChangeForm();
+    }
+    public void SetInputsAllowed(bool inputs)
+    {
+        inpusAllowed = inputs;
     }
 }
