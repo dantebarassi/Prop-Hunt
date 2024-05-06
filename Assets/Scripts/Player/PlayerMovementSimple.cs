@@ -38,7 +38,7 @@ public class PlayerMovementSimple : NetworkBehaviour
     //public MeshRenderer netMeshRenderer { get; set; }
     //public Collider netCollider { get; set; }
     public MeshFilter OtherMeshRenderer;
-    public Collider OtherCollider;
+    public BoxCollider OtherCollider;
     public Material OtherMaterial;
     public bool inpusAllowed=true;
     //Donde va?
@@ -48,8 +48,8 @@ public class PlayerMovementSimple : NetworkBehaviour
     public void NetChangeForm()
     {
         OtherMeshRenderer = GameManager.instance.MeshSelector(netId).GetComponent<MeshFilter>();
-        OtherCollider = GameManager.instance.MeshSelector(netId).GetComponent<Collider>();
-        OtherMaterial = GameManager.instance.MeshSelector(netId).GetComponent<Material>();
+        OtherCollider = GameManager.instance.MeshSelector(netId).GetComponent<BoxCollider>();
+        OtherMaterial = GameManager.instance.MeshSelector(netId).GetComponent<Renderer>().material;
         ChangeForm(OtherMeshRenderer, OtherCollider, OtherMaterial);
     }
 
@@ -120,9 +120,9 @@ public class PlayerMovementSimple : NetworkBehaviour
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         netId = OtherId;
-                        OtherCollider = objectHitted.GetComponent<Collider>();
+                        OtherCollider = objectHitted.GetComponent<BoxCollider>();
                         OtherMeshRenderer = objectHitted.GetComponent<MeshFilter>();
-                        OtherMaterial = objectHitted.GetComponent<Material>();
+                        OtherMaterial = objectHitted.GetComponent<Renderer>().material;
                         _changeFormPressed = true;
                     }
                 }
@@ -179,15 +179,15 @@ public class PlayerMovementSimple : NetworkBehaviour
         _rb.velocity = velocity;
         _jumpPressed = false;
     }
-    public void ChangeForm(MeshFilter mesh, Collider collider, Material material)
+    public void ChangeForm(MeshFilter mesh, BoxCollider collider, Material material)
     {
         Debug.Log("ChangeForm");
         
         _myView.GetComponent<MeshFilter>().mesh = mesh.mesh;
 
-        //Destroy(this.GetComponent<BoxCollider>());
+        Destroy(this.GetComponent<BoxCollider>());
 
-        Collider col = this.gameObject.GetComponent<Collider>();
+        Collider col = this.gameObject.AddComponent<BoxCollider>();
         col = collider;
 
         _myView.GetComponent<Renderer>().material = material;
