@@ -29,6 +29,8 @@ public class PlayerMovementSimple : NetworkBehaviour
     public GameObject thisGameObjectOriginal;
     //[SerializeField] GameObject myVisual;
     [SerializeField] MeshFilter myMesh;
+    [SerializeField] Collider myCollider;
+    [SerializeField] Material myMaterial;
     [Networked, OnChangedRender(nameof(NetChangeForm))]
     public int netId { get; set; }
     public int OtherId;
@@ -36,6 +38,7 @@ public class PlayerMovementSimple : NetworkBehaviour
     //public Collider netCollider { get; set; }
     public MeshFilter OtherMeshRenderer;
     public Collider OtherCollider;
+    public Material OtherMaterial;
     public bool inpusAllowed=true;
     //Donde va?
     //Quaternion cameraRotationY = Quaternion.Euler(0, Camera.transform.rotation.eulerAngles.y, 0);
@@ -44,7 +47,9 @@ public class PlayerMovementSimple : NetworkBehaviour
     public void NetChangeForm()
     {
         OtherMeshRenderer = GameManager.instance.MeshSelector(netId).GetComponent<MeshFilter>();
-        ChangeForm(OtherMeshRenderer, OtherCollider);
+        OtherCollider = GameManager.instance.MeshSelector(netId).GetComponent<Collider>();
+        OtherMaterial = GameManager.instance.MeshSelector(netId).GetComponent<Material>();
+        ChangeForm(OtherMeshRenderer, OtherCollider, OtherMaterial);
     }
 
     // Start is called before the first frame update
@@ -116,6 +121,7 @@ public class PlayerMovementSimple : NetworkBehaviour
                         netId = OtherId;
                         OtherCollider = objectHitted.GetComponent<Collider>();
                         OtherMeshRenderer = objectHitted.GetComponent<MeshFilter>();
+                        OtherMaterial = objectHitted.GetComponent<Material>();
                         _changeFormPressed = true;
                     }
                 }
@@ -140,7 +146,7 @@ public class PlayerMovementSimple : NetworkBehaviour
     public void Movement()
     {
         if (_jumpPressed) Jump();
-        if (_changeFormPressed) ChangeForm(OtherMeshRenderer, OtherCollider);
+        if (_changeFormPressed) ChangeForm(OtherMeshRenderer, OtherCollider, OtherMaterial);
 
         if (_moveY != 0 || _moveX != 0)
         {
@@ -172,7 +178,7 @@ public class PlayerMovementSimple : NetworkBehaviour
         _rb.velocity = velocity;
         _jumpPressed = false;
     }
-    public void ChangeForm(MeshFilter mesh, Collider collider)
+    public void ChangeForm(MeshFilter mesh, Collider collider, Material material)
     {
         Debug.Log("ChangeForm");
         
