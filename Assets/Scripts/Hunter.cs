@@ -11,7 +11,7 @@ public class Hunter : NetworkBehaviour
 
     private float _moveY;
     private float _moveX;
-    private Rigidbody _rb;
+    public Rigidbody _rb;
     public float jumpForce = 4;
     private bool _jumpPressed;
     private Vector3 velocity;
