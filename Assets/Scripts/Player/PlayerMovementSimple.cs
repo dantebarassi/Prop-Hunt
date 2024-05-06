@@ -27,10 +27,11 @@ public class PlayerMovementSimple : NetworkBehaviour
 
     private Renderer _renderer;
     public GameObject thisGameObjectOriginal;
+    [SerializeField] GameObject _myView;
     //[SerializeField] GameObject myVisual;
-    [SerializeField] MeshFilter myMesh;
-    [SerializeField] Collider myCollider;
-    [SerializeField] Material myMaterial;
+    //[SerializeField] MeshFilter myMesh;
+    //[SerializeField] Collider myCollider;
+    //[SerializeField] Material myMaterial;
     [Networked, OnChangedRender(nameof(NetChangeForm))]
     public int netId { get; set; }
     public int OtherId;
@@ -182,7 +183,15 @@ public class PlayerMovementSimple : NetworkBehaviour
     {
         Debug.Log("ChangeForm");
         
-        myMesh.mesh = mesh.mesh;
+        _myView.GetComponent<MeshFilter>().mesh = mesh.mesh;
+
+        //Destroy(this.GetComponent<BoxCollider>());
+
+        Collider col = this.gameObject.GetComponent<Collider>();
+        col = collider;
+
+        _myView.GetComponent<Renderer>().material = material;
+
         speed = 0;
         //NetChangeForm();
         StartCoroutine(FinishChangeForm());
