@@ -45,10 +45,10 @@ public class CameraBehavior : MonoBehaviour
             return;
         }
 
-        _step = Speed * Vector2.Distance(target.position, transform.position) * Time.deltaTime;
-
-        Vector2 pos = Vector2.MoveTowards(transform.position, target.position + _offset, _step);
-        transform.position = pos;
+        //_step = Speed * Vector2.Distance(target.position, transform.position) * Time.deltaTime;
+        //
+        //Vector2 pos = Vector2.MoveTowards(transform.position, target.position + _offset, _step);
+        //transform.position = pos;
     }
 
 
