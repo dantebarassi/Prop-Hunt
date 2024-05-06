@@ -185,10 +185,11 @@ public class PlayerMovementSimple : NetworkBehaviour
         
         _myView.GetComponent<MeshFilter>().mesh = mesh.mesh;
 
-        Destroy(this.GetComponent<BoxCollider>());
+        //Destroy(this.GetComponent<BoxCollider>());
 
-        Collider col = this.gameObject.AddComponent<BoxCollider>();
-        col = collider;
+        //BoxCollider col = this.gameObject.AddComponent<BoxCollider>();
+        //col = collider;
+        this.gameObject.GetComponent<BoxCollider>().size = collider.size;
 
         _myView.GetComponent<Renderer>().material = material;
 
