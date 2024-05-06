@@ -190,6 +190,8 @@ public class PlayerMovementSimple : NetworkBehaviour
         //BoxCollider col = this.gameObject.AddComponent<BoxCollider>();
         //col = collider;
         this.gameObject.GetComponent<BoxCollider>().size = collider.size;
+        this.gameObject.GetComponent<BoxCollider>().center = collider.center;
+        this.gameObject.transform.localScale = collider.gameObject.transform.localScale;
 
         _myView.GetComponent<Renderer>().material = material;
 
