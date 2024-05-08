@@ -61,6 +61,18 @@ public class MouseLook : MonoBehaviour
         //y mediante la variable _rHit obtengo los datos contra lo que colision (si es que colisiono)
         //Ademas la ejecucion de este metodo me devuelve un booleano que lo guardo en _isCameraBlocked
         _isCameraBlocked = Physics.SphereCast(_ray, 0.1f, out _rHit, _maxDistance, layerMask);
+
+        if (_spectating)
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                myTarget = GetNextOrPrevSpectatingTarget(1);
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                myTarget = GetNextOrPrevSpectatingTarget(-1);
+            }
+        }
     }
 
     private void LateUpdate()
@@ -79,7 +91,7 @@ public class MouseLook : MonoBehaviour
 
     void UpdateCameraRotation(float xAxi, float yAxi)
     {
-        transform.position = myTarget.position;
+        transform.position = myTarget.position + new Vector3(0,1.3f,0);
 
         if (xAxi == 0 && yAxi == 0) return;
 
@@ -155,5 +167,22 @@ public class MouseLook : MonoBehaviour
             return myTarget;
         }
         return _spectatingList.Find(x => x.transform.GetChild(0) != myTarget).transform.GetChild(0);
+    }
+    private Transform GetNextOrPrevSpectatingTarget(int to)
+    {
+        int currentIndex = _spectatingList.IndexOf(myTarget.GetComponentInParent<PlayerMovementSimple>());
+
+        if (currentIndex + to >= _spectatingList.Count)
+        {
+            return _spectatingList[0].transform.GetChild(0);
+        }
+        else if (currentIndex + to < 0)
+        {
+            return _spectatingList[_spectatingList.Count - 1].transform.GetChild(0);
+        }
+        else
+        {
+            return _spectatingList[currentIndex + to].transform.GetChild(0);
+        }
     }
 }
