@@ -19,7 +19,7 @@ public class Hunter : NetworkBehaviour
     private Vector3 cameraDir;
     Camera Camera;
     private Renderer _renderer;
-    float Damage = 40;
+    public float Damage = 40;
     public bool attack=false;
     float countToAttack = 0;
     bool hunterCan = false;
@@ -131,7 +131,7 @@ public class Hunter : NetworkBehaviour
         {
             timer += Runner.DeltaTime;
             //Debug.Log(timer);
-            if (timer >= 600f)
+            if (timer >= 100f)
                 UIManager.instance.SetVictoryScreen();
         }
         Movement();
@@ -185,7 +185,6 @@ public class Hunter : NetworkBehaviour
     //    //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
     //    NetworkActivePlayers ++;
     //}
-
     IEnumerator HunterCanMove()
     {
         yield return new WaitForSeconds(10f);

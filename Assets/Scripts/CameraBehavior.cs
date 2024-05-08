@@ -26,7 +26,7 @@ public class CameraBehavior : MonoBehaviour
             return;
         }
 
-        transform.position = target.position + new Vector3(0, 2.261f, 0.6f);
+        transform.position = target.position + new Vector3(0, 2.261f, 0);
 
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
@@ -37,8 +37,9 @@ public class CameraBehavior : MonoBehaviour
         horizontalRotation += mouseX * MouseSensitivity;
 
         transform.rotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
+        target.transform.rotation = Quaternion.Euler(0, horizontalRotation, 0);
 
-
+        //Rotation(mouseX, mouseY);
         //Spectador
         if (target == null)
         {
@@ -110,6 +111,16 @@ public class CameraBehavior : MonoBehaviour
                 target = GetNextOrPrevSpectatingTarget(-1);
             }
         }
+    }
+
+    [SerializeField] float _yMaxRotation = 80, _yMinRotation = -80, _yRotation;
+    public void Rotation(float xAxis, float yAxis)
+    {
+        _yRotation += yAxis;
+
+        _yRotation = Mathf.Clamp(_yRotation, _yMinRotation, _yMaxRotation);
+
+        transform.rotation = Quaternion.Euler(-_yRotation, xAxis, 0f);
     }
 
 

@@ -156,7 +156,7 @@ MonoBehaviour:
   TotalWords: 1
   ApplyTiming: 2
   SyncSettings: 79
-  StateHashes: 000000008b7cfd670f5f2b88fd7e6e10e7ef54fa
+  StateHashes: 000000008b7cfd670f5f2b88fd7e6e10e7ef54fa4b3f8b39a55d434c
   TriggerHashes: 00000000
 --- !u!114 &8405394449468567743
 MonoBehaviour:
@@ -170,6 +170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8297ccc73a8dd9449814222520e1ca8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _skinnedRenderer: {fileID: 1606526798275247815}
+  _skinnedRenderer2: {fileID: 4074748319835232029}
 --- !u!1 &7162404525741261073
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,6 +245,7 @@ MonoBehaviour:
   speed: 3
   _rb: {fileID: 0}
   jumpForce: 4
+  Damage: 40
   attack: 0
   _kills: 0
   timer: 0
@@ -380,9 +383,41 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -1781356600409242780, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 415287891258781815, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 415287891258781815, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+      propertyPath: m_Quality
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
       propertyPath: m_Name
       value: Paladin J Nordstrom@Walking
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051571768989249988, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2334541885690575373, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2898355158428612036, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3099756089343826349, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
       propertyPath: m_Controller
@@ -401,6 +436,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+--- !u!137 &1606526798275247815 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3099756089343826349, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+  m_PrefabInstance: {fileID: 4417763095597164394}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &4074748319835232029 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 415287891258781815, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}
+  m_PrefabInstance: {fileID: 4417763095597164394}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4234990433238466689 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e95f176d317f1f640ad4d2a0b157c5ec, type: 3}

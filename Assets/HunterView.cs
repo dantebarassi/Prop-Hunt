@@ -6,6 +6,7 @@ using Fusion;
 public class HunterView : NetworkBehaviour
 {
     private Renderer _renderer;
+    [SerializeField] SkinnedMeshRenderer _skinnedRenderer, _skinnedRenderer2;
     Animator _animator;
     public static HunterView Local { get; private set; }
 
@@ -18,6 +19,7 @@ public class HunterView : NetworkBehaviour
         }
         _renderer = GetComponentInChildren<Renderer>();
         _animator = GetComponentInChildren<Animator>();
+        //_skinnedRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
     }
     public override void FixedUpdateNetwork()
     {
@@ -27,7 +29,8 @@ public class HunterView : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        _skinnedRenderer.enabled = false;
+        _skinnedRenderer2.enabled = false;
     }
 
     // Update is called once per frame
