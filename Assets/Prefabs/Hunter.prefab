@@ -243,7 +243,6 @@ MonoBehaviour:
   speed: 3
   _rb: {fileID: 0}
   jumpForce: 4
-  Damage: 10
   attack: 0
   _kills: 0
   timer: 0

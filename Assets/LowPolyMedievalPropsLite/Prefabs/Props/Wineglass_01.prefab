@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4393386670280440743}
   - component: {fileID: 6238610535970754805}
   - component: {fileID: 1323132706709090405}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wineglass_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

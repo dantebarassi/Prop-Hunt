@@ -26,7 +26,7 @@ public class CameraBehavior : MonoBehaviour
             return;
         }
 
-        transform.position = target.position;
+        transform.position = target.position + new Vector3(0, 2.261f, 0.6f);
 
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");

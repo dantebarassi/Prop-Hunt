@@ -75,7 +75,9 @@ public class PlayerMovementSimple : NetworkBehaviour
         speed = 15;
         PlayerMovement = this;
         Camera = Camera.main;
-        Camera.main.GetComponent<CameraBehavior>().target = transform;
+        //Camera.main.GetComponent<CameraBehavior>().target = transform;
+        Camera.main.GetComponentInParent<MouseLook>().myTarget = transform;
+        Camera.main.GetComponentInParent<MouseLook>().enabled = true;
         //var velocity = _rb.velocity;
     }
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]

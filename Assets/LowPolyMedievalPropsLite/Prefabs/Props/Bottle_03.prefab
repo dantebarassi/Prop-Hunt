@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6543882503876691508}
   - component: {fileID: 1345058120720301258}
   - component: {fileID: 4725670507945528392}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bottle_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}

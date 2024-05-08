@@ -54,7 +54,7 @@ public class GameManager : NetworkBehaviour
     }
     public void SetPlayerSpectating(PlayerMovementSimple playerMovementSimple)
     {
-        FindObjectOfType<CameraBehavior>().SetSpectating();
+        FindObjectOfType<MouseLook>().SetSpectating();
         playerMovementSimple.SetInputsAllowed(false);
     }
 

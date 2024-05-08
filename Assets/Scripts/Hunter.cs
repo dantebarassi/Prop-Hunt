@@ -19,7 +19,7 @@ public class Hunter : NetworkBehaviour
     private Vector3 cameraDir;
     Camera Camera;
     private Renderer _renderer;
-    public float Damage = 40;
+    float Damage = 40;
     public bool attack=false;
     float countToAttack = 0;
     bool hunterCan = false;
@@ -47,6 +47,7 @@ public class Hunter : NetworkBehaviour
         speed = 15;
         Camera = Camera.main;
         Camera.main.GetComponent<CameraBehavior>().target = transform;
+        Camera.main.GetComponent<CameraBehavior>().enabled = true;
         //var velocity = _rb.velocity;
     }
     //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
