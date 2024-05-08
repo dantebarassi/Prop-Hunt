@@ -200,12 +200,12 @@ public class Hunter : NetworkBehaviour
         //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
         kills++;
         if (kills >= Runner.ActivePlayers.Count() - 1)
-            RpcSetVictoryScreen(this.gameObject);
+            RpcSetVictoryScreen(this);
             
     }
     public void WhoWins() => Debug.Log(kills);
     [Rpc]
-    private void RpcSetVictoryScreen(GameObject hunter)
+    private void RpcSetVictoryScreen(Hunter hunter)
     {
         UIManager.instance.SetVictoryScreen(hunter);
     }

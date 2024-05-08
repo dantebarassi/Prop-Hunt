@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
         _victoryTextObject.SetActive(false);
     }
 
-    public void SetVictoryScreen(GameObject winner)
+    public void SetVictoryScreen(Hunter winner)
     {
         _victoryTextObject.SetActive(true);
         //_victoryMeshTMP.text = winner.GetComponent<Hunter>() != null ? "El hunter Wins" : "Los Objetos Wins";
