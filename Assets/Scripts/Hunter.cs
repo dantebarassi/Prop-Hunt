@@ -132,7 +132,7 @@ public class Hunter : NetworkBehaviour
             timer += Runner.DeltaTime;
             //Debug.Log(timer);
             if (timer >= 100f)
-                UIManager.instance.SetVictoryScreen();
+                RpcSetVictoryScreen();
         }
         Movement();
     }
@@ -199,8 +199,19 @@ public class Hunter : NetworkBehaviour
         // The code inside here will run on the client which owns this object (has state and input authority).
         //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
         kills++;
-        if (kills >= Runner.ActivePlayers.Count()-1)
-            UIManager.instance.SetVictoryScreen(this.gameObject);
+        if (kills >= Runner.ActivePlayers.Count() - 1)
+            RpcSetVictoryScreen(this.gameObject);
+            
     }
     public void WhoWins() => Debug.Log(kills);
+    [Rpc]
+    private void RpcSetVictoryScreen(GameObject hunter)
+    {
+        UIManager.instance.SetVictoryScreen(hunter);
+    }
+    [Rpc]
+    private void RpcSetVictoryScreen()
+    {
+        UIManager.instance.SetVictoryScreen();
+    }
 }
