@@ -19,6 +19,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] public GameObject deadPlace;
     
     public float timer=0;
+    [Networked, OnChangedRender(nameof(StartGame))]
+    public int ContadorListos { get; set; } = 0;
     void Awake()
     {
         if (instance == null)
@@ -57,7 +59,16 @@ public class GameManager : NetworkBehaviour
         FindObjectOfType<MouseLook>().SetSpectating();
         playerMovementSimple.SetInputsAllowed(false);
     }
-
+    public void EstaListo()
+    {
+        ContadorListos++;
+        Comenzar();
+    }
+    public void Comenzar()
+    {
+        if (ContadorListos >= Runner.ActivePlayers.Count())
+            startGame = true;
+    }
     //public void WhoWins() => Debug.Log(kills);
     //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     //public void RpcHunterGetKill()
@@ -75,5 +86,5 @@ public class GameManager : NetworkBehaviour
     //    //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
     //    startGame=true;
     //}
-    //public void StartGame() => Debug.Log("STAAAART");
+    public void StartGame() => Debug.Log("STAAAART");
 }
