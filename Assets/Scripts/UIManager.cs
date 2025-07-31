@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     private GameObject _victoryTextObject;
     [SerializeField] Image _hunterWait;
     [SerializeField] TextMeshProUGUI _hunterWaitTMP;
+    [SerializeField] Button hunterButton;
+    [SerializeField] Button playerButton;
     private void Awake()
     {
         if (instance == null) instance = this;
@@ -44,5 +46,34 @@ public class UIManager : MonoBehaviour
     {
         _hunterWait.gameObject.SetActive(false);
         _hunterWaitTMP.gameObject.SetActive(false);
+    }
+    public void HunterButtonClick()
+    {
+        hunterButton.gameObject.SetActive(false);
+        playerButton.gameObject.SetActive(false);
+        //GameManager.instance.RPCAddHunter();
+        //Como hacer para decirle al spawner que haga un hunter o un player cuando toco esto
+        //
+        //GameManager.instance
+    }
+    public void PlayerButtonClick()
+    {
+        hunterButton.gameObject.SetActive(false);
+        playerButton.gameObject.SetActive(false);
+        //GameManager.instance.RPCAddPlayer();
+        //Como hacer para decirle al spawner que haga un hunter o un player cuando toco esto
+        //
+        //GameManager.instance
+    }
+    public void PrenderSelector(UnityEngine.Events.UnityAction hunterAction, UnityEngine.Events.UnityAction playerAction)
+    {
+        hunterButton.gameObject.SetActive(true);
+        playerButton.gameObject.SetActive(true);
+        hunterButton.onClick.AddListener(hunterAction);
+        playerButton.onClick.AddListener(playerAction);
+        //GameManager.instance.RPCAddPlayer();
+        //Como hacer para decirle al spawner que haga un hunter o un player cuando toco esto
+        //
+        //GameManager.instance
     }
 }

@@ -6,21 +6,26 @@ using System.Linq;
 
 public class GameManager : NetworkBehaviour
 {
-    public int playersActive;
-
-    public Hunter hunter;
     public List<PlayerMovementSimple> playerMovements = new();
+    public List<Hunter> hunters = new();
+    public List<GameObject> playerBasic = new();
+    public Hunter hunter;
+
+    public int playersActive;
 
     //[Networked, OnChangedRender(nameof(StartGame))]
     public bool startGame { get; set; } = false;
     public Dictionary<int,GameObject> Objetos;
     public static GameManager instance;
-
+    public bool hunterCan = false;
+    public bool startTimer = false;
     [SerializeField] public GameObject deadPlace;
-    
-    public float timer=0;
+    public bool alreadyStartTime = false;
+
+    public float timer { get; set; } = 0;
     [Networked, OnChangedRender(nameof(StartGame))]
     public int ContadorListos { get; set; } = 0;
+    public int kills { get; set; }
     void Awake()
     {
         if (instance == null)
@@ -33,13 +38,6 @@ public class GameManager : NetworkBehaviour
             Destroy(gameObject); 
         }
         Objetos = new Dictionary<int, GameObject>();
-    }
-    private void Update()
-    {
-        //if (startGame)
-        //    timer += Runner.DeltaTime;
-        //if(timer >= 60f)
-        //    UIManager.instance.SetVictoryScreen(playerMovements.First().gameObject);
     }
     public void FillWithObjects(int idTryEntry, GameObject objectsTryEntry)
     {

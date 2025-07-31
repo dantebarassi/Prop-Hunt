@@ -7,7 +7,13 @@ public class Healt : NetworkBehaviour
 {
     [Networked, OnChangedRender(nameof(HealthChanged))]
     public float NetworkedHealth { get; set; } = 100;
-    
+    PlayerView _pv;
+
+    private void Start()
+    {
+        _pv = GetComponentInChildren<PlayerView>();
+    }
+
     void HealthChanged()
     {
         Debug.Log($"Health changed to: {NetworkedHealth}");
@@ -20,6 +26,8 @@ public class Healt : NetworkBehaviour
         if(NetworkedHealth - damage > 0)
         {
             NetworkedHealth -= damage;
+            if (_pv != null)
+                _pv.Hit();
         }
         else
         {
