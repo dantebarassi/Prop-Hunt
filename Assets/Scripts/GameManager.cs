@@ -85,4 +85,19 @@ public class GameManager : NetworkBehaviour
     //    startGame=true;
     //}
     public void StartGame() => Debug.Log("STAAAART");
+    public void WhoWins()
+    {
+        if (kills >= Runner.ActivePlayers.Count() - 1)
+            RpcSetVictoryScreen(hunter);
+    }
+    [Rpc]
+    private void RpcSetVictoryScreen(Hunter hunter)
+    {
+        UIManager.instance.SetVictoryScreen(hunter);
+    }
+    [Rpc]
+    private void RpcSetVictoryScreen()
+    {
+        UIManager.instance.SetVictoryScreen();
+    }
 }
