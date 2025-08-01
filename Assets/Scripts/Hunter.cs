@@ -8,6 +8,7 @@ public class Hunter : NetworkBehaviour
 {
     public static Hunter LocalPlayer { get; private set; }
     public float speed = 3;
+    [SerializeField] float _speed;
 
     private float _moveY;
     private float _moveX;
@@ -22,10 +23,13 @@ public class Hunter : NetworkBehaviour
     public float Damage = 40;
     public bool attack=false;
     float countToAttack = 0;
-    bool hunterCan = false;
-    [Networked, OnChangedRender(nameof(WhoWins))]
-    public int kills { get; set; }
+    //bool hunterCan = false;
+    //[Networked, OnChangedRender(nameof(WhoWins))]
+    public int kills { get; set; } = 0;
     public float timer = 0;
+    ChangeDetector _changeDetector;
+    bool hunterCan = false;
+    public bool alreadyStartTime = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -63,21 +67,10 @@ public class Hunter : NetworkBehaviour
     //    yield return new WaitForSeconds(0.1f);
     //    netId = id;
     //}
-
-
-    void Update()
+    public override void FixedUpdateNetwork()
     {
-        if (!HasStateAuthority) return;
-        if (Runner.ActivePlayers.Count() < 2)
-        {
-            hunterCan = false;
-            UIManager.instance.HunterWait();
-        }
-        else
-        {
-            if(!hunterCan)
-                StartCoroutine(HunterCanMove());
-        }
+        if (!HasInputAuthority) return;
+        if (Runner.ActivePlayers.Count() < 2) _speed = 0;
         if (hunterCan)
         {
             _moveY = Input.GetAxisRaw("Horizontal");
@@ -86,7 +79,7 @@ public class Hunter : NetworkBehaviour
             {
                 _jumpPressed = true;
             }
-            
+           
             //Aca hacer el raycast y poner adentro 
             //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
             //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
@@ -104,7 +97,7 @@ public class Hunter : NetworkBehaviour
                     {
                         if (hit.transform.TryGetComponent<Healt>(out var health))
                         {
-                            health.DealDamageRpc(Damage,this);
+                            health.DealDamageRpc(Damage, this);
                         }
                     }
                 }
@@ -116,26 +109,54 @@ public class Hunter : NetworkBehaviour
                     attack = false;
             }
         }
-    }
-
-    public override void FixedUpdateNetwork()
-    {
-        //transform.position += (Vector3.forward * _moveY) * speed * Runner.DeltaTime;
-        //transform.position += (Vector3.right * _moveX*-1) * speed * Runner.DeltaTime;
-        //_rb.MovePosition((Vector3.forward * _moveY) * speed * Runner.DeltaTime);
-        //_rb.MovePosition((Vector3.right * _moveX * -1) * speed * Runner.DeltaTime);
-
-        //_rb.velocity += ;
-        if (!HasStateAuthority) return;
-        if(hunterCan)
-        {
-            timer += Runner.DeltaTime;
-            //Debug.Log(timer);
-            if (timer >= 100f)
-                RpcSetVictoryScreen();
-        }
         Movement();
     }
+
+    void Update()
+    {
+        if (!HasStateAuthority) return;
+        if (Runner.ActivePlayers.Count() < 2)
+        {
+            hunterCan = false;
+            UIManager.instance.HunterWait();
+            GameManager.instance.startTimer = true;
+        }
+        else
+        {
+            if(!hunterCan)
+                StartCoroutine(HunterCanMove());
+        }
+        if (kills >= Runner.ActivePlayers.Count() - 1)
+            RpcSetVictoryScreen(this);
+        if (hunterCan && !alreadyStartTime)
+        {
+            StartCoroutine(TimeToWinProps());
+        }
+        
+    }
+
+    //public override void FixedUpdateNetwork()
+    //{
+    //    //transform.position += (Vector3.forward * _moveY) * speed * Runner.DeltaTime;
+    //    //transform.position += (Vector3.right * _moveX*-1) * speed * Runner.DeltaTime;
+    //    //_rb.MovePosition((Vector3.forward * _moveY) * speed * Runner.DeltaTime);
+    //    //_rb.MovePosition((Vector3.right * _moveX * -1) * speed * Runner.DeltaTime);
+    //
+    //    //_rb.velocity += ;
+    //    if (!HasStateAuthority) return;
+    //    if(hunterCan)
+    //    {
+    //        timer += Runner.DeltaTime;
+    //        //Debug.Log(timer);
+    //        if (timer >= 100f)
+    //            RpcSetVictoryScreen();
+    //    }
+    //    Movement();
+    //}
+
+
+
+    //CHECKEAR PARA QUE SE MUEVA BIEEEN 2025
 
     public void Movement()
     {
@@ -162,6 +183,10 @@ public class Hunter : NetworkBehaviour
             _rb.velocity = velocity;
         }
     }
+    public override void Render()
+    {
+        if (_changeDetector == null) return;
+    }
 
     public void Jump()
     {
@@ -185,11 +210,16 @@ public class Hunter : NetworkBehaviour
     //    //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
     //    NetworkActivePlayers ++;
     //}
+    public void StartHunterCanMove()
+    {
+        StartCoroutine(HunterCanMove());
+    }
     IEnumerator HunterCanMove()
     {
         yield return new WaitForSeconds(10f);
         //Debug.Log("StartMoveHunter");
         //velocity = 0f;
+        GameManager.instance.hunterCan = true;
         hunterCan = true;
         UIManager.instance.HunterStart();
     }
@@ -199,8 +229,8 @@ public class Hunter : NetworkBehaviour
         // The code inside here will run on the client which owns this object (has state and input authority).
         //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
         kills++;
-        if (kills >= Runner.ActivePlayers.Count() - 1)
-            RpcSetVictoryScreen(this);
+        //if (kills >= Runner.ActivePlayers.Count() - 1)
+        //    RpcSetVictoryScreen(this);
             
     }
     public void WhoWins() => Debug.Log(kills);
@@ -213,5 +243,13 @@ public class Hunter : NetworkBehaviour
     private void RpcSetVictoryScreen()
     {
         UIManager.instance.SetVictoryScreen();
+    }
+    public IEnumerator TimeToWinProps()
+    {
+        Debug.Log("EsperandoGanar");
+        alreadyStartTime = true;
+        yield return new WaitForSeconds(30f);
+        Debug.Log("Gane");
+        RpcSetVictoryScreen();
     }
 }
