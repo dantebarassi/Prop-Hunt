@@ -5,6 +5,11 @@ using Fusion;
 
 public class PlayerMovementSimple : NetworkBehaviour
 {
+    private NetworkCharacterController _cc;
+    [SerializeField] float _speed;
+
+    ChangeDetector _changeDetector;
+
     public static PlayerMovementSimple LocalPlayer { get; private set; }
     public float speed = 3;
 
@@ -57,6 +62,7 @@ public class PlayerMovementSimple : NetworkBehaviour
     void Start()
     {
         thisGameObjectOriginal = this.gameObject;
+        _changeFormPressed = false;
         //myMesh = myVisual.gameObject.GetComponent<MeshFilter>();
     }
 

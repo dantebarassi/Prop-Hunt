@@ -6,10 +6,12 @@ using System.Linq;
 
 public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
 {
-    [SerializeField] GameObject _playerPrefab;
-    [SerializeField] GameObject _hunterPrefab;
+    //[SerializeField] GameObject _playerPrefab;
+    //[SerializeField] GameObject _hunterPrefab;
+    [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] Transform[] _spawnPoints;
     public int count=0;
+    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     //Siempre se va a ejecutar cuando alguien se una, y esta funcion da toda la data del que se unio
     public void PlayerJoined(PlayerRef player)
