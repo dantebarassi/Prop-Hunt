@@ -5315,13 +5315,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 272803433}
+  - component: {fileID: 272803434}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &272803433
 Transform:
   m_ObjectHideFlags: 0
@@ -5337,6 +5338,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &272803434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 272803432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db1a864e48b98dd48a82a4dfbdc6a765, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerPrefab:
+    RawGuidValue: 82a724bbf20412341bf3ce8c88c8489a
+  _spawnPoints:
+  - {fileID: 251151120}
+  - {fileID: 1381009706}
+  - {fileID: 2087062417}
+  - {fileID: 74454639}
+  - {fileID: 1263723721}
+  count: 0
 --- !u!1 &277020345
 GameObject:
   m_ObjectHideFlags: 0
@@ -6703,8 +6725,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db1a864e48b98dd48a82a4dfbdc6a765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab: {fileID: 6436676858233754199, guid: d3a83e574c433d745a81290e1c8c0d88, type: 3}
-  _hunterPrefab: {fileID: 7162404525741261073, guid: dd8643ebc7a4370459c597afd7b6efd9, type: 3}
+  _playerPrefab:
+    RawGuidValue: 82a724bbf20412341bf3ce8c88c8489a
   _spawnPoints:
   - {fileID: 251151120}
   - {fileID: 1381009706}
