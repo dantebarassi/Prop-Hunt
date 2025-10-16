@@ -35,7 +35,7 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
             //    Cursor.lockState = CursorLockMode.Locked;
             //    Runner.Spawn(_playerPrefab, _spawnPoints[Random.Range(1,_spawnPoints.Length-1)].transform.position, Quaternion.identity);
             //}
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
             Vector3 spawnPosition = _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length - 1)].transform.position;
             Debug.Log(spawnPosition);
             //Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * _spawnPoints[0].transform.position.x, _spawnPoints[0].transform.position.y, _spawnPoints[0].transform.position.z);
@@ -80,20 +80,20 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
         //    SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         //});
     }
-    private void OnGUI()
-    {
-        if (_runner == null)
-        {
-            if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
-            {
-                StartGame(GameMode.Host);
-            }
-            if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
-            {
-                StartGame(GameMode.Client);
-            }
-        }
-    }
+    //private void OnGUI()
+    //{
+    //    if (_runner == null)
+    //    {
+    //        if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
+    //        {
+    //            StartGame(GameMode.Host);
+    //        }
+    //        if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
+    //        {
+    //            StartGame(GameMode.Client);
+    //        }
+    //    }
+    //}
     private bool _mouseButton0;
     private bool _eButton;
     private bool _spacebar;
