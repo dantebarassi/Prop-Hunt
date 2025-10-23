@@ -44,7 +44,7 @@ public class MouseLook : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
 
         transform.forward = myTarget.forward;
         _mouseX = transform.eulerAngles.y;

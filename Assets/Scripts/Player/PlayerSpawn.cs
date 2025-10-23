@@ -107,33 +107,33 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
         if (Input.GetKeyDown(KeyCode.Space))
             _spacebar = _spacebar |= true;
     }
-    //public void OnInput(NetworkRunner runner, NetworkInput input)
-    //{
-    //    var data = new NetworkInputData();
-    //
-    //    if (Input.GetKey(KeyCode.W))
-    //        data.direction += Camera.main.transform.forward;
-    //
-    //    if (Input.GetKey(KeyCode.S))
-    //        data.direction -= Camera.main.transform.forward;
-    //
-    //    if (Input.GetKey(KeyCode.A))
-    //        data.direction -= Camera.main.transform.right;
-    //
-    //    if (Input.GetKey(KeyCode.D))
-    //        data.direction += Camera.main.transform.right;
-    //
-    //    data.direction.y = 0;
-    //
-    //    data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
-    //    _mouseButton0 = false;
-    //    data.buttons.Set(NetworkInputData.EBUTTON, _eButton);
-    //    _eButton = false;
-    //    data.buttons.Set(NetworkInputData.SPACEBAR, _spacebar);
-    //    _spacebar = false;
-    //
-    //    input.Set(data);
-    //}
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+        var data = new NetworkInputData();
+    
+        if (Input.GetKey(KeyCode.W))
+            data.direction += Camera.main.transform.forward;
+    
+        if (Input.GetKey(KeyCode.S))
+            data.direction -= Camera.main.transform.forward;
+    
+        if (Input.GetKey(KeyCode.A))
+            data.direction -= Camera.main.transform.right;
+    
+        if (Input.GetKey(KeyCode.D))
+            data.direction += Camera.main.transform.right;
+    
+        data.direction.y = 0;
+    
+        data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
+        _mouseButton0 = false;
+        data.buttons.Set(NetworkInputData.EBUTTON, _eButton);
+        _eButton = false;
+        data.buttons.Set(NetworkInputData.SPACEBAR, _spacebar);
+        _spacebar = false;
+    
+        input.Set(data);
+    }
     //public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     //public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     //public void OnConnectedToServer(NetworkRunner runner) { }

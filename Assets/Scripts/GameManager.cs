@@ -44,7 +44,7 @@ public class GameManager : NetworkBehaviour
         if (!Objetos.ContainsKey(idTryEntry))
         {
             Objetos.Add(idTryEntry, objectsTryEntry);
-            Debug.Log("Se agrego" + idTryEntry + "   " + objectsTryEntry);
+            //Debug.Log("Se agrego" + idTryEntry + "   " + objectsTryEntry);
         }
             
     }

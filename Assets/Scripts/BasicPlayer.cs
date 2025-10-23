@@ -58,11 +58,13 @@ public class BasicPlayer : NetworkBehaviour
     //}
     public void GoPlayer()
     {
+        Debug.Log("Entra RPDADDPLAYER1");
         if (!HasInputAuthority)
         {
             //ResyncNetworckValuesRpc();
             return;
         }
+        Debug.Log("Entra RPDADDPLAYER2");
         //GameManager.instance.RPCAddPlayer(this);
         RPC_AddPlayer(this);
         //gameObject.GetComponent<Player>().enabled = true;
@@ -74,7 +76,7 @@ public class BasicPlayer : NetworkBehaviour
     {
         player.gameObject.GetComponent<Hunter>().enabled = true;
         player.hunterView.gameObject.SetActive(true);
-        player.gameObject.GetComponent<Player>().enabled = false;
+        player.gameObject.GetComponent<PlayerMovementSimple>().enabled = false;
         player.gameObject.GetComponent<Healt>().enabled = false;
         player.playerView.gameObject.SetActive(false);
 
@@ -84,10 +86,11 @@ public class BasicPlayer : NetworkBehaviour
         //playerBasic.First().gameObject.GetComponent<Healt>().enabled = false;
         //playerBasic.First().GetComponent<BasicPlayer>().playerView.gameObject.SetActive(false);
     }
-    [Rpc(RpcSources.All, RpcTargets.All, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_AddPlayer(BasicPlayer player)
     {
-        player.gameObject.GetComponent<Player>().enabled = true;
+        Debug.Log("Entra RPDADDPLAYER3");
+        player.gameObject.GetComponent<PlayerMovementSimple>().enabled = true;
         player.gameObject.GetComponent<Healt>().enabled = true;
         player.playerView.gameObject.SetActive(true);
         player.gameObject.GetComponent<Hunter>().enabled = false;
