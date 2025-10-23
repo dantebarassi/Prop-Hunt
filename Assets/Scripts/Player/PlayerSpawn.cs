@@ -57,7 +57,7 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
             _spawnedCharacters.Remove(player);
         }
     }
-    async void StartGame(GameMode mode)
+    async void StartGame()
     {
         // Create the Fusion runner and let it know that we will be providing user input
         _runner = gameObject.AddComponent<NetworkRunner>();
@@ -79,6 +79,7 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
         //    Scene = scene,
         //    SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         //});
+
     }
     //private void OnGUI()
     //{

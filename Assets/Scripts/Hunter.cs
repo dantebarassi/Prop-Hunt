@@ -6,6 +6,7 @@ using System.Linq;
 
 public class Hunter : NetworkBehaviour
 {
+    private NetworkCharacterController _cc;
     public static Hunter LocalPlayer { get; private set; }
     public float speed = 3;
     [SerializeField] float _speed;
@@ -35,11 +36,15 @@ public class Hunter : NetworkBehaviour
     {
         //myMesh = myVisual.gameObject.GetComponent<MeshFilter>();
     }
+    private void Awake()
+    {
+        _cc = GetComponent<NetworkCharacterController>();
+    }
 
     public override void Spawned()
     {
         //base.Spawned();
-        _rb = GetComponent<Rigidbody>();
+        //_rb = GetComponent<Rigidbody>();
         GameManager.instance.hunter = this;
         if (!HasStateAuthority)
         {
@@ -69,47 +74,54 @@ public class Hunter : NetworkBehaviour
     //}
     public override void FixedUpdateNetwork()
     {
-        if (!HasInputAuthority) return;
-        if (Runner.ActivePlayers.Count() < 2) _speed = 0;
-        if (hunterCan)
+        //if (!HasInputAuthority) return;
+        //if (Runner.ActivePlayers.Count() < 2) _speed = 0;
+        if (GetInput(out NetworkInputData data))
         {
-            _moveY = Input.GetAxisRaw("Horizontal");
-            _moveX = Input.GetAxisRaw("Vertical");
-            if (Input.GetKeyDown(KeyCode.Space))
+            _cc.Move(_speed * data.direction * Runner.DeltaTime);
+            data.direction.Normalize();
+            if (!HasInputAuthority) return;
+            if (Runner.ActivePlayers.Count() < 2) _speed = 0;
+            if (hunterCan)
             {
-                _jumpPressed = true;
-            }
-           
-            //Aca hacer el raycast y poner adentro 
-            //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
-            //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
-            if (!attack)
-            {
-                //Raycast
-                if (Input.GetKeyDown(KeyCode.Mouse0))
+                _moveY = Input.GetAxisRaw("Horizontal");
+                _moveX = Input.GetAxisRaw("Vertical");
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    attack = true;
-                    countToAttack = 0;
-                    Ray ray = hunter.Camera.ScreenPointToRay(Input.mousePosition);
-                    ray.origin += hunter.Camera.transform.forward;
-                    Debug.DrawRay(ray.origin, ray.direction, Color.red, 5f);
-                    if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
+                    _cc.Jump();
+                }
+
+                //Aca hacer el raycast y poner adentro 
+                //MeshRenderer meshRenderer = hit.collider.GetComponent<MeshRenderer>(); // Obtén el MeshRenderer del objeto impactado
+                //Collider collider = hit.collider; // El Collider ya lo tenemos desde hit.collider
+                if (!attack)
+                {
+                    //Raycast
+                    if (Input.GetKeyDown(KeyCode.Mouse0))
                     {
-                        if (hit.transform.TryGetComponent<Healt>(out var health))
+                        attack = true;
+                        countToAttack = 0;
+                        Ray ray = hunter.Camera.ScreenPointToRay(Input.mousePosition);
+                        ray.origin += hunter.Camera.transform.forward;
+                        Debug.DrawRay(ray.origin, ray.direction, Color.red, 5f);
+                        if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
                         {
-                            health.DealDamageRpc(Damage, this);
+                            if (hit.transform.TryGetComponent<Healt>(out var health))
+                            {
+                                health.DealDamageRpc(Damage, this);
+                            }
                         }
                     }
                 }
+                else
+                {
+                    countToAttack += Runner.DeltaTime;
+                    if (countToAttack >= 2f)
+                        attack = false;
+                }
             }
-            else
-            {
-                countToAttack += Runner.DeltaTime;
-                if (countToAttack >= 2f)
-                    attack = false;
-            }
+            //Movement();
         }
-        Movement();
     }
 
     void Update()
@@ -158,31 +170,31 @@ public class Hunter : NetworkBehaviour
 
     //CHECKEAR PARA QUE SE MUEVA BIEEEN 2025
 
-    public void Movement()
-    {
-        if (_jumpPressed) Jump();
-
-        if (_moveY != 0 || _moveX != 0)
-        {
-            cameraDir = Camera.main.transform.forward;
-            cameraDir.y = 0;
-            this.transform.forward = cameraDir;
-            _rb.velocity += (((this.transform.forward * _moveX) * speed * Runner.DeltaTime) + ((this.transform.right * _moveY) * speed * Runner.DeltaTime));
-            if (Mathf.Abs(_rb.velocity.magnitude) > speed)
-            {
-                //var velocity = Vector3.ClampMagnitude(_rb.velocity, speed);
-                velocity.y = _rb.velocity.y;
-                _rb.velocity = velocity;
-            }
-        }
-        else
-        {
-            var velocity = _rb.velocity;
-            velocity.x = 0;
-            velocity.z = 0;
-            _rb.velocity = velocity;
-        }
-    }
+    //public void Movement()
+    //{
+    //    if (_jumpPressed) Jump();
+    //
+    //    if (_moveY != 0 || _moveX != 0)
+    //    {
+    //        cameraDir = Camera.main.transform.forward;
+    //        cameraDir.y = 0;
+    //        this.transform.forward = cameraDir;
+    //        _rb.velocity += (((this.transform.forward * _moveX) * speed * Runner.DeltaTime) + ((this.transform.right * _moveY) * speed * Runner.DeltaTime));
+    //        if (Mathf.Abs(_rb.velocity.magnitude) > speed)
+    //        {
+    //            //var velocity = Vector3.ClampMagnitude(_rb.velocity, speed);
+    //            velocity.y = _rb.velocity.y;
+    //            _rb.velocity = velocity;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        var velocity = _rb.velocity;
+    //        velocity.x = 0;
+    //        velocity.z = 0;
+    //        _rb.velocity = velocity;
+    //    }
+    //}
     public override void Render()
     {
         if (_changeDetector == null) return;
@@ -252,4 +264,5 @@ public class Hunter : NetworkBehaviour
         Debug.Log("Gane");
         RpcSetVictoryScreen();
     }
+
 }
