@@ -113,6 +113,7 @@ public class PlayerMovementSimple : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
+            Debug.Log("Entro InputDATA");
             data.direction.Normalize();
             _cc.Move(_speed * data.direction * Runner.DeltaTime);
             if (data.direction.sqrMagnitude == 0) isMoving = false;
