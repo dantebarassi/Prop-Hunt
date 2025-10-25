@@ -113,15 +113,15 @@ public class PlayerMovementSimple : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
-            Debug.Log("Entro InputDATA");
+            //Debug.Log("Entro InputDATA");
             data.direction.Normalize();
-            _cc.Move(_speed * data.direction * Runner.DeltaTime);
+            if (Runner.ActivePlayers.Count() >= 2) _cc.Move(_speed * data.direction * Runner.DeltaTime);
             if (data.direction.sqrMagnitude == 0) isMoving = false;
             else isMoving = true;
             if (!HasStateAuthority) return;
             if (inpusAllowed)
             {
-                // ACTIVAR DESPUES DE CHECKEAR QUE FUNCIONA    if (Runner.ActivePlayers.Count() < 2) _speed = 0;
+                //if (Runner.ActivePlayers.Count() < 2) _speed = 0;
                 //_moveY = Input.GetAxisRaw("Horizontal");
                 //_moveX = Input.GetAxisRaw("Vertical");
                 //if (Input.GetKeyDown(KeyCode.Space))
@@ -141,8 +141,9 @@ public class PlayerMovementSimple : NetworkBehaviour
                 //Raycast
                 Ray ray = PlayerMovement.Camera.ScreenPointToRay(Input.mousePosition);
                 ray.origin += PlayerMovement.Camera.transform.forward;
-                Debug.DrawRay(ray.origin, ray.direction, Color.red, 1f);
-                if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit))
+                //ray.direction -= 
+                Debug.DrawRay(ray.origin, ray.direction*3f, Color.red, 1f);
+                if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction, out var hit, 3f))
                 {
                     if (hit.transform.TryGetComponent<Objetos>(out var objectHitted))
                     {

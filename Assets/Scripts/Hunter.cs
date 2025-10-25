@@ -75,17 +75,16 @@ public class Hunter : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         //if (!HasInputAuthority) return;
-        //if (Runner.ActivePlayers.Count() < 2) _speed = 0;
         if (GetInput(out NetworkInputData data))
         {
-            _cc.Move(_speed * data.direction * Runner.DeltaTime);
+            if (Runner.ActivePlayers.Count() >= 2 && hunterCan) _cc.Move(_speed * data.direction * Runner.DeltaTime);
             data.direction.Normalize();
             if (!HasInputAuthority) return;
             if (Runner.ActivePlayers.Count() < 2) _speed = 0;
             if (hunterCan)
             {
-                _moveY = Input.GetAxisRaw("Horizontal");
-                _moveX = Input.GetAxisRaw("Vertical");
+                //_moveY = Input.GetAxisRaw("Horizontal");
+                //_moveX = Input.GetAxisRaw("Vertical");
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     _cc.Jump();

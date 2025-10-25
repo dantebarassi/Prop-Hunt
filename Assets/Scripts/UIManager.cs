@@ -51,6 +51,7 @@ public class UIManager : MonoBehaviour
     {
         hunterButton.gameObject.SetActive(false);
         playerButton.gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
         //GameManager.instance.RPCAddHunter();
         //Como hacer para decirle al spawner que haga un hunter o un player cuando toco esto
         //
@@ -60,6 +61,7 @@ public class UIManager : MonoBehaviour
     {
         hunterButton.gameObject.SetActive(false);
         playerButton.gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
         //GameManager.instance.RPCAddPlayer();
         //Como hacer para decirle al spawner que haga un hunter o un player cuando toco esto
         //

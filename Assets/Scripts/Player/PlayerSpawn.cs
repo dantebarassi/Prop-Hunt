@@ -8,7 +8,7 @@ using System;
 
 public class PlayerSpawn : SimulationBehaviour, IPlayerJoined, INetworkRunnerCallbacks
 {
-    private NetworkRunner _runner;
+    //private NetworkRunner _runner;
     //[SerializeField] GameObject _playerPrefab;
     //[SerializeField] GameObject _hunterPrefab;
     [SerializeField] private NetworkPrefabRef _playerPrefab;

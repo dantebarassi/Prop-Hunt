@@ -23455,8 +23455,8 @@ MonoBehaviour:
   target: {fileID: 0}
   MouseSensitivity: 10
   Speed: 1
-  _yMaxRotation: 0
-  _yMinRotation: 0
+  _yMaxRotation: 80
+  _yMinRotation: -80
   _yRotation: 0
 --- !u!81 &1328507910
 AudioListener:
