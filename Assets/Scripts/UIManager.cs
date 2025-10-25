@@ -26,27 +26,34 @@ public class UIManager : MonoBehaviour
         _victoryTextObject.SetActive(false);
     }
 
-    public void SetVictoryScreen(Hunter winner)
+    public void SetVictoryScreen(bool IsHunter)
     {
+        if(IsHunter)
+        {
+            //_victoryMeshTMP.text = winner.GetComponent<Hunter>() != null ? "El hunter Wins" : "Los Objetos Wins";
+            _victoryMeshTMP.text =  "El hunter Wins";
+        }
+        else
+        {
+            _victoryMeshTMP.text = "Los Objetos Wins";
+        }
         _victoryTextObject.SetActive(true);
-        //_victoryMeshTMP.text = winner.GetComponent<Hunter>() != null ? "El hunter Wins" : "Los Objetos Wins";
-        _victoryMeshTMP.text =  "El hunter Wins";
     }
-    public void SetVictoryScreen()
+    //public void SetVictoryScreen()
+    //{
+    //    _victoryTextObject.SetActive(true);
+    //    _victoryMeshTMP.text = "Los Objetos Wins";
+    //}
+    public void HunterWait(bool isWaiting)
     {
-        _victoryTextObject.SetActive(true);
-        _victoryMeshTMP.text = "Los Objetos Wins";
+        _hunterWait.gameObject.SetActive(isWaiting);
+        _hunterWaitTMP.gameObject.SetActive(isWaiting);
     }
-    public void HunterWait()
-    {
-        _hunterWait.gameObject.SetActive(true);
-        _hunterWaitTMP.gameObject.SetActive(true);
-    }
-    public void HunterStart()
-    {
-        _hunterWait.gameObject.SetActive(false);
-        _hunterWaitTMP.gameObject.SetActive(false);
-    }
+    //public void HunterStart()
+    //{
+    //    _hunterWait.gameObject.SetActive(false);
+    //    _hunterWaitTMP.gameObject.SetActive(false);
+    //}
     public void HunterButtonClick()
     {
         hunterButton.gameObject.SetActive(false);

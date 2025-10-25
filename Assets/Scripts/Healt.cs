@@ -8,6 +8,7 @@ public class Healt : NetworkBehaviour
     [Networked, OnChangedRender(nameof(HealthChanged))]
     public float NetworkedHealth { get; set; } = 100;
     PlayerView _pv;
+    public ParticleSystem particlesHit;
 
     private void Start()
     {
@@ -18,7 +19,7 @@ public class Healt : NetworkBehaviour
     {
         Debug.Log($"Health changed to: {NetworkedHealth}");
     }
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    [Rpc(RpcSources.All, RpcTargets.All)]
     public void DealDamageRpc(float damage, Hunter hunter)
     {
         // The code inside here will run on the client which owns this object (has state and input authority).
@@ -27,7 +28,10 @@ public class Healt : NetworkBehaviour
         {
             NetworkedHealth -= damage;
             if (_pv != null)
+            {
                 _pv.Hit();
+                particlesHit.Play();
+            }
         }
         else
         {

@@ -135,7 +135,7 @@ MonoBehaviour:
   jumpImpulse: 8
   acceleration: 10
   braking: 10
-  maxSpeed: 2
+  maxSpeed: 10
   rotationSpeed: 15
 --- !u!114 &8250174595493937258
 MonoBehaviour:
@@ -190,6 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _NetworkedHealth: 100
+  particlesHit: {fileID: 3058186377414080781}
 --- !u!114 &8243201865200234570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,6 +211,7 @@ MonoBehaviour:
   attack: 0
   timer: 0
   alreadyStartTime: 0
+  isMoving: 0
 --- !u!1 &1776370205575427447
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,6 +279,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skinnedRenderer: {fileID: 4982810534481302633}
   _skinnedRenderer2: {fileID: 7773655345039441331}
+  _animator: {fileID: 0}
+  _hunter: {fileID: 0}
 --- !u!1 &1971205762728118451
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,6 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _NetworkedHealth: 100
+  particlesHit: {fileID: 0}
 --- !u!114 &7511846501841251582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,6 +494,7 @@ MonoBehaviour:
   attack: 0
   timer: 0
   alreadyStartTime: 0
+  isMoving: 0
 --- !u!1 &7507638773060818738
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,6 +729,11 @@ PrefabInstance:
 --- !u!4 &440319275925148246 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1341389168390183935, guid: fb3261c0115a0a84cbfba4bb8c6d738f, type: 3}
+  m_PrefabInstance: {fileID: 1477680247338076585}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3058186377414080781 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4535434980197068964, guid: fb3261c0115a0a84cbfba4bb8c6d738f, type: 3}
   m_PrefabInstance: {fileID: 1477680247338076585}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7936174300374257092

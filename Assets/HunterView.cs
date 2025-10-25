@@ -31,7 +31,7 @@ public class HunterView : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         _animator.SetBool("isRunning", _hunter.isMoving);
-        _animator.SetBool("isAttacking", Hunter.LocalPlayer.attack);
+        _animator.SetBool("isAttacking", _hunter.attack);
     }
     // Start is called before the first frame update
     void Start()

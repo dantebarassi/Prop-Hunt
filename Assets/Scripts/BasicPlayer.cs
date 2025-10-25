@@ -8,7 +8,7 @@ public class BasicPlayer : NetworkBehaviour
 {
     [SerializeField] public GameObject hunterView;
     [SerializeField] public GameObject playerView;
-    public int CambioMiForma=0;
+    public int CambioMiForma = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,8 +47,8 @@ public class BasicPlayer : NetworkBehaviour
         RPC_AddHunter(this);
         //StartCoroutine(asd());
         //GameManager.instance.RPCAddHunter(this);
-    //    gameObject.GetComponent<Hunter>().enabled = true;
-    //    hunterView.gameObject.SetActive(true);
+        //    gameObject.GetComponent<Hunter>().enabled = true;
+        //    hunterView.gameObject.SetActive(true);
     }
     //IEnumerator asd()
     //{
@@ -71,7 +71,7 @@ public class BasicPlayer : NetworkBehaviour
         //gameObject.GetComponent<Healt>().enabled = true;
         //playerView.gameObject.SetActive(true);
     }
-    [Rpc(RpcSources.All, RpcTargets.All, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_AddHunter(BasicPlayer player)
     {
         player.gameObject.GetComponent<Hunter>().enabled = true;
@@ -79,6 +79,8 @@ public class BasicPlayer : NetworkBehaviour
         player.gameObject.GetComponent<PlayerMovementSimple>().enabled = false;
         player.gameObject.GetComponent<Healt>().enabled = false;
         player.playerView.gameObject.SetActive(false);
+        RpcActiveHunterWait();
+        
 
         //playerBasic.First().gameObject.GetComponent<Hunter>().enabled = true;
         //playerBasic.First().GetComponent<BasicPlayer>().hunterView.gameObject.SetActive(true);
@@ -86,6 +88,12 @@ public class BasicPlayer : NetworkBehaviour
         //playerBasic.First().gameObject.GetComponent<Healt>().enabled = false;
         //playerBasic.First().GetComponent<BasicPlayer>().playerView.gameObject.SetActive(false);
     }
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RpcActiveHunterWait()
+    {
+        UIManager.instance.HunterWait(true);
+    }
+
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_AddPlayer(BasicPlayer player)
     {

@@ -68,36 +68,50 @@ public class GameManager : NetworkBehaviour
             startGame = true;
     }
     //public void WhoWins() => Debug.Log(kills);
-    //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    //public void RpcHunterGetKill()
-    //{
-    //    // The code inside here will run on the client which owns this object (has state and input authority).
-    //    //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
-    //    kills++;
-    //    if (kills >= 4)
-    //        UIManager.instance.SetVictoryScreen(hunter.gameObject);
-    //}
-    //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    //public void RpcStartGame()
-    //{
-    //    // The code inside here will run on the client which owns this object (has state and input authority).
-    //    //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
-    //    startGame=true;
-    //}
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RpcHunterGetKill()
+    {
+        // The code inside here will run on the client which owns this object (has state and input authority).
+        //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
+        kills++;
+        RpcWhoWins();
+        //if (kills >= 4)
+        //    UIManager.instance.SetVictoryScreen(hunter.gameObject);
+    }
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RpcStartGame()
+    {
+        // The code inside here will run on the client which owns this object (has state and input authority).
+        //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
+        startGame=true;
+    }
     public void StartGame() => Debug.Log("STAAAART");
-    public void WhoWins()
+    [Rpc]
+    public void RpcWhoWins()
     {
         if (kills >= Runner.ActivePlayers.Count() - 1)
-            RpcSetVictoryScreen(hunter);
+            RpcSetVictoryScreen(true);
+        if (hunterCan && !alreadyStartTime)
+        {
+            StartCoroutine(TimeToWinProps());
+        }
     }
     [Rpc]
-    private void RpcSetVictoryScreen(Hunter hunter)
+    private void RpcSetVictoryScreen(bool isHunter)
     {
-        UIManager.instance.SetVictoryScreen(hunter);
+        UIManager.instance.SetVictoryScreen(isHunter);
     }
-    [Rpc]
-    private void RpcSetVictoryScreen()
+    //[Rpc]
+    //private void RpcSetVictoryScreen()
+    //{
+    //    UIManager.instance.SetVictoryScreen();
+    //}
+    public IEnumerator TimeToWinProps()
     {
-        UIManager.instance.SetVictoryScreen();
+        Debug.Log("EsperandoGanar");
+        alreadyStartTime = true;
+        yield return new WaitForSeconds(30f);
+        Debug.Log("Gane");
+        RpcSetVictoryScreen(false);
     }
 }
