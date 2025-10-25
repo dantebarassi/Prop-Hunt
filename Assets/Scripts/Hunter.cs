@@ -31,6 +31,7 @@ public class Hunter : NetworkBehaviour
     ChangeDetector _changeDetector;
     bool hunterCan = false;
     public bool alreadyStartTime = false;
+    public bool isMoving=false;
     // Start is called before the first frame update
     void Start()
     {
@@ -77,9 +78,11 @@ public class Hunter : NetworkBehaviour
         //if (!HasInputAuthority) return;
         if (GetInput(out NetworkInputData data))
         {
+            if (!HasInputAuthority) return;
             if (Runner.ActivePlayers.Count() >= 2 && hunterCan) _cc.Move(_speed * data.direction * Runner.DeltaTime);
             data.direction.Normalize();
-            if (!HasInputAuthority) return;
+            if (data.direction.sqrMagnitude == 0) isMoving = false;
+            else isMoving = true;
             if (Runner.ActivePlayers.Count() < 2) _speed = 0;
             if (hunterCan)
             {

@@ -7,7 +7,8 @@ public class HunterView : NetworkBehaviour
 {
     private Renderer _renderer;
     [SerializeField] SkinnedMeshRenderer _skinnedRenderer, _skinnedRenderer2;
-    Animator _animator;
+    public Animator _animator;
+    public Hunter _hunter;
     public static HunterView Local { get; private set; }
 
 
@@ -25,10 +26,11 @@ public class HunterView : NetworkBehaviour
             _skinnedRenderer2.enabled = false;
         }
         //_skinnedRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        _hunter = GetComponentInParent<Hunter>();
     }
     public override void FixedUpdateNetwork()
     {
-        //_animator.SetBool("isRunning", Hunter.LocalPlayer._rb.velocity.SetY0().sqrMagnitude > 0);
+        _animator.SetBool("isRunning", _hunter.isMoving);
         _animator.SetBool("isAttacking", Hunter.LocalPlayer.attack);
     }
     // Start is called before the first frame update

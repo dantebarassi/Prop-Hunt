@@ -6,9 +6,9 @@ using Fusion;
 public class PlayerView : NetworkBehaviour
 {
     private Renderer _renderer;
-    Animator _animator;
+    public Animator _animator;
     public static PlayerView Local { get; private set; }
-    PlayerMovementSimple _player;
+    public PlayerMovementSimple _player;
 
     public override void Spawned()
     {
@@ -17,7 +17,7 @@ public class PlayerView : NetworkBehaviour
             Local = this;
         }
         _renderer = GetComponentInChildren<Renderer>();
-        _animator = GetComponentInChildren<Animator>();
+        _animator = GetComponent<Animator>();
         _player = GetComponentInParent<PlayerMovementSimple>();
     }
     public override void FixedUpdateNetwork()

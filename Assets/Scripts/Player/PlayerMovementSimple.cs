@@ -114,11 +114,11 @@ public class PlayerMovementSimple : NetworkBehaviour
         if (GetInput(out NetworkInputData data))
         {
             //Debug.Log("Entro InputDATA");
+            if (!HasStateAuthority) return;
             data.direction.Normalize();
             if (Runner.ActivePlayers.Count() >= 2) _cc.Move(_speed * data.direction * Runner.DeltaTime);
             if (data.direction.sqrMagnitude == 0) isMoving = false;
             else isMoving = true;
-            if (!HasStateAuthority) return;
             if (inpusAllowed)
             {
                 //if (Runner.ActivePlayers.Count() < 2) _speed = 0;
