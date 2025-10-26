@@ -21,9 +21,17 @@ public class BasicPlayer : NetworkBehaviour
             //ResyncNetworckValuesRpc();
             return;
         }
+        Cursor.lockState = CursorLockMode.Locked;
         //base.Spawned();
-        UIManager.instance.PrenderSelector(GoHunter, GoPlayer);
+        //UIManager.instance.PrenderSelector(GoHunter, GoPlayer);
         GameManager.instance.playerBasic.Add(this.gameObject);
+        if (SingletonChoose.Instance.selectedMode == 1)
+            GoHunter();
+        else
+            GoPlayer();
+
+
+        
     }
     // Update is called once per frame
     void Update()
@@ -71,7 +79,7 @@ public class BasicPlayer : NetworkBehaviour
         //gameObject.GetComponent<Healt>().enabled = true;
         //playerView.gameObject.SetActive(true);
     }
-    [Rpc(RpcSources.All, RpcTargets.All)]
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_AddHunter(BasicPlayer player)
     {
         player.gameObject.GetComponent<Hunter>().enabled = true;
@@ -94,7 +102,7 @@ public class BasicPlayer : NetworkBehaviour
         UIManager.instance.HunterWait(true);
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_AddPlayer(BasicPlayer player)
     {
         Debug.Log("Entra RPDADDPLAYER3");

@@ -89,7 +89,7 @@ public class Hunter : NetworkBehaviour
                 UIManager.instance.HunterWait(false);
 
                 //mañana probar sacando esto
-                GameManager.instance.RpcWhoWins();
+                //GameManager.instance.RpcWhoWins();
                 //_moveY = Input.GetAxisRaw("Horizontal");
                 //_moveX = Input.GetAxisRaw("Vertical");
                 if (Input.GetKeyDown(KeyCode.Space))

@@ -85,4 +85,28 @@ public class UIManager : MonoBehaviour
         //
         //GameManager.instance
     }
+    //public async void BackToMenu()
+    //{
+    //    await Disconnect();
+    //
+    //    SceneManager.LoadScene(0);
+    //}
+    //public async Task Disconnect()
+    //{
+    //    if (_runnerInstance == null)
+    //        return;
+    //
+    //    StatusText.text = "Disconnecting...";
+    //    PanelGroup.interactable = false;
+    //
+    //    // Remove shutdown listener since we are disconnecting deliberately
+    //    var events = _runnerInstance.GetComponent<NetworkEvents>();
+    //    events.OnShutdown.RemoveListener(OnShutdown);
+    //
+    //    await _runnerInstance.Shutdown();
+    //    _runnerInstance = null;
+    //
+    //    // Reset of scene network objects is needed, reload the whole scene
+    //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    //}
 }
