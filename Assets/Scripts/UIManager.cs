@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _hunterWaitTMP;
     [SerializeField] Button hunterButton;
     [SerializeField] Button playerButton;
+    [SerializeField] GameObject pause;
     private void Awake()
     {
         if (instance == null) instance = this;
@@ -84,6 +85,10 @@ public class UIManager : MonoBehaviour
         //Como hacer para decirle al spawner que haga un hunter o un player cuando toco esto
         //
         //GameManager.instance
+    }
+    public void Pause(bool isPause)
+    {
+        pause.SetActive(isPause);
     }
     //public async void BackToMenu()
     //{

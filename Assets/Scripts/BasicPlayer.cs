@@ -9,6 +9,7 @@ public class BasicPlayer : NetworkBehaviour
     [SerializeField] public GameObject hunterView;
     [SerializeField] public GameObject playerView;
     public int CambioMiForma = 0;
+    public bool pause=false;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +42,19 @@ public class BasicPlayer : NetworkBehaviour
         {
             //ResyncNetworckValuesRpc();
             return;
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(pause)
+            {
+                UIManager.instance.Pause(false);
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                UIManager.instance.Pause(true);
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
     }
     public void GoHunter()

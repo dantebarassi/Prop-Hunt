@@ -209,4 +209,21 @@ public class PlayerSpawn : SimulationBehaviour, IPlayerJoined, INetworkRunnerCal
         //    //_runner.ProvideInput = true;
         //}
     }
+    public async void ExitToMenu()
+    {
+        var runner = FindObjectOfType<NetworkRunner>();
+        if (runner)
+        {
+            // En Shared, este check te dice si sos el master client
+            bool soyMaster = runner.GameMode == GameMode.Shared &&
+                             (runner.IsSharedModeMasterClient || runner.IsServer);
+
+            // Si sos master, tu Shutdown suele tumbar la partida para todos.
+            // Si NO sos master, solo te desconectás vos.
+            await runner.Shutdown();
+        }
+
+        Cursor.visible = true;
+    }
+
 }
