@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using UnityEngine.UI;
+using System.Linq;
 
 public class BasicPlayer : NetworkBehaviour
 {
@@ -56,6 +57,10 @@ public class BasicPlayer : NetworkBehaviour
                 Cursor.lockState = CursorLockMode.None;
             }
         }
+        if(Runner.ActivePlayers.Count()==1)
+            UIManager.instance.WaitingOthers(true);
+        else
+            UIManager.instance.WaitingOthers(false);
     }
     public void GoHunter()
     {

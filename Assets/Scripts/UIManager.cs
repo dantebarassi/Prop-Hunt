@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _hunterWaitTMP;
     [SerializeField] Button hunterButton;
     [SerializeField] Button playerButton;
-    [SerializeField] GameObject pause;
+    [SerializeField] GameObject pause, waitingOthers;
     private void Awake()
     {
         if (instance == null) instance = this;
@@ -89,6 +89,10 @@ public class UIManager : MonoBehaviour
     public void Pause(bool isPause)
     {
         pause.SetActive(isPause);
+    }
+    public void WaitingOthers(bool isWaiting)
+    {
+        waitingOthers.SetActive(isWaiting);
     }
     //public async void BackToMenu()
     //{
