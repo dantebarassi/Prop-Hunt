@@ -9,6 +9,7 @@ public class Healt : NetworkBehaviour
     public float NetworkedHealth { get; set; } = 100;
     PlayerView _pv;
     public ParticleSystem particlesHit;
+    public MeshRenderer view;
 
     private void Start()
     {
@@ -42,6 +43,7 @@ public class Healt : NetworkBehaviour
             hunter.RpcHunterGetKill();
             this.gameObject.GetComponent<PlayerMovementSimple>().transform.position = GameManager.instance.deadPlace.transform.position;
             GameManager.instance.SetPlayerSpectating(this.gameObject.GetComponent<PlayerMovementSimple>());
+            view.enabled = false;
         }
     }
 }

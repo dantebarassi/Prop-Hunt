@@ -115,12 +115,12 @@ public class PlayerMovementSimple : NetworkBehaviour
         {
             //Debug.Log("Entro InputDATA");
             if (!HasStateAuthority) return;
-            data.direction.Normalize();
-            if (Runner.ActivePlayers.Count() >= 2) _cc.Move(_speed * data.direction * Runner.DeltaTime);
-            if (data.direction.sqrMagnitude == 0) isMoving = false;
-            else isMoving = true;
             if (inpusAllowed)
             {
+                data.direction.Normalize();
+                if (Runner.ActivePlayers.Count() >= 2) _cc.Move(_speed * data.direction * Runner.DeltaTime);
+                if (data.direction.sqrMagnitude == 0) isMoving = false;
+                else isMoving = true;
                 //if (Runner.ActivePlayers.Count() < 2) _speed = 0;
                 //_moveY = Input.GetAxisRaw("Horizontal");
                 //_moveX = Input.GetAxisRaw("Vertical");

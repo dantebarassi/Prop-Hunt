@@ -166,7 +166,14 @@ public class MouseLook : MonoBehaviour
         {
             return myTarget;
         }
-        return _spectatingList.Find(x => x.transform.GetChild(0) != myTarget).transform.GetChild(0);
+        //return _spectatingList.Find(x => x.transform.GetChild(0) != myTarget).transform.GetChild(0);
+        var p = _spectatingList.Find(x =>
+        x != null &&
+        x.transform.childCount > 0 &&
+        x.transform.GetChild(0) != myTarget
+    );
+
+        return p != null ? p.transform.GetChild(0) : myTarget;
     }
     private Transform GetNextOrPrevSpectatingTarget(int to)
     {

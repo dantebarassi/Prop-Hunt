@@ -191,6 +191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NetworkedHealth: 100
   particlesHit: {fileID: 3058186377414080781}
+  view: {fileID: 4019644881331032366}
 --- !u!114 &8243201865200234570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,6 +329,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NetworkedHealth: 100
   particlesHit: {fileID: 0}
+  view: {fileID: 0}
 --- !u!114 &7511846501841251582
 MonoBehaviour:
   m_ObjectHideFlags: 0
