@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,14 @@ using UnityEngine;
 public class SingletonChoose : MonoBehaviour
 {
     public static SingletonChoose Instance { get; private set; }
-    public int selectedMode;
+    [Networked, OnChangedRender(nameof(OnRoleChanged))]
+    public int selectedMode { get; set; }
+
+    public void OnRoleChanged(int index)
+    {
+        selectedMode = index;
+        Debug.Log(selectedMode);   // se ejecuta en TODOS cuando Role cambia
+    }
     void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }

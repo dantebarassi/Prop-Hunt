@@ -7,7 +7,7 @@ namespace Starter.MainMenu
 	{
 		public void Select(int index)
 		{
-			SingletonChoose.Instance.selectedMode = index;
+			SingletonChoose.Instance.OnRoleChanged(index);
 		}
 		public void LoadScene(int index)
 		{
