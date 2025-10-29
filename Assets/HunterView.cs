@@ -25,23 +25,11 @@ public class HunterView : NetworkBehaviour
             _skinnedRenderer.enabled = false;
             _skinnedRenderer2.enabled = false;
         }
-        //_skinnedRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         _hunter = GetComponentInParent<Hunter>();
     }
     public override void FixedUpdateNetwork()
     {
         _animator.SetBool("isRunning", _hunter.isMoving);
         _animator.SetBool("isAttacking", _hunter.attack);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

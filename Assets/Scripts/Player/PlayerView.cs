@@ -23,23 +23,10 @@ public class PlayerView : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         _animator.SetBool("isRunning", _player.isMoving);
-        //_animator.SetBool("isRunning", PlayerMovementSimple.LocalPlayer._rb.velocity.SetY0().sqrMagnitude > 0);
-        //_animator.SetBool("isRunning", PlayerMovementSimple.LocalPlayer._rb.velocity.magnitude == 0);
         _animator.SetBool("isTranforming", PlayerMovementSimple.LocalPlayer._changeFormPressed);
     }
     public void Hit()
     {
         _animator.SetTrigger("Hit");
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

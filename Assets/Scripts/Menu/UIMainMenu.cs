@@ -11,7 +11,6 @@ namespace Starter.MainMenu
 		}
 		public void LoadScene(int index)
 		{
-			//SingletonChoose.Instance.selectedMode = beHunter;
 			SceneManager.LoadScene(index);
 		}
 
@@ -26,7 +25,6 @@ namespace Starter.MainMenu
 
 		private void OnEnable()
 		{
-			// Ensure the cursor is visible when coming back from the game
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
 		}

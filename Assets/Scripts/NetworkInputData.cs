@@ -9,6 +9,6 @@ public struct NetworkInputData : INetworkInput
     public const byte SPACEBAR = 3;
 
     public NetworkButtons buttons;
-    //ESTO ES LO QUE HAY QUE ACTUALIZAR CON EL CLIENTE
+
     public Vector3 direction;
 }

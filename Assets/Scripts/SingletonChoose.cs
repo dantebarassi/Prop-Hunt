@@ -12,7 +12,7 @@ public class SingletonChoose : MonoBehaviour
     public void OnRoleChanged(int index)
     {
         selectedMode = index;
-        Debug.Log(selectedMode);   // se ejecuta en TODOS cuando Role cambia
+        Debug.Log(selectedMode);
     }
     void Awake()
     {
