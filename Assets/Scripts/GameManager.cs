@@ -79,6 +79,15 @@ public class GameManager : NetworkBehaviour
         //    UIManager.instance.SetVictoryScreen(hunter.gameObject);
     }
     [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RpcHunterCanMove()
+    {
+        // The code inside here will run on the client which owns this object (has state and input authority).
+        //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
+        RpcWhoWins();
+        //if (kills >= 4)
+        //    UIManager.instance.SetVictoryScreen(hunter.gameObject);
+    }
+    [Rpc(RpcSources.All, RpcTargets.All)]
     public void RpcStartGame()
     {
         // The code inside here will run on the client which owns this object (has state and input authority).

@@ -242,6 +242,7 @@ public class Hunter : NetworkBehaviour
         //velocity = 0f;
         GameManager.instance.hunterCan = true;
         hunterCan = true;
+        RpcCanMove();
         //UIManager.instance.HunterStart();
     }
     [Rpc(RpcSources.All, RpcTargets.All)]
@@ -254,6 +255,17 @@ public class Hunter : NetworkBehaviour
         //if (kills >= Runner.ActivePlayers.Count() - 1)
         //    RpcSetVictoryScreen(this);
             
+    }
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RpcCanMove()
+    {
+        // The code inside here will run on the client which owns this object (has state and input authority).
+        //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
+        GameManager.instance.RpcHunterCanMove();
+        //kills++;
+        //if (kills >= Runner.ActivePlayers.Count() - 1)
+        //    RpcSetVictoryScreen(this);
+
     }
 
     //OJO activar si sigue sin funcionar lo del hunter u objetos win
