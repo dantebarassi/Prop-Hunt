@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
@@ -23,7 +23,7 @@ public class Healt : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void DealDamageRpc(float damage, Hunter hunter)
     {
-        Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
+        //Debug.Log("Received DealDamageRpc on StateAuthority, modifying Networked variable");
         if(NetworkedHealth - damage > 0)
         {
             NetworkedHealth -= damage;
@@ -31,15 +31,31 @@ public class Healt : NetworkBehaviour
             {
                 _pv.Hit();
                 particlesHit.Play();
+                //RPC_PlayHitFX();
             }
         }
         else
         {
             NetworkedHealth -= damage;
-            hunter.RpcHunterGetKill();
+            if (HasStateAuthority)
+            {
+                GameManager.instance.RpcHunterGetKill();
+            }
+            //hunter.RpcHunterGetKill();
             this.gameObject.GetComponent<PlayerMovementSimple>().transform.position = GameManager.instance.deadPlace.transform.position;
-            GameManager.instance.SetPlayerSpectating(this.gameObject.GetComponent<PlayerMovementSimple>());
+            //GameManager.instance.SetPlayerSpectating(this.gameObject.GetComponent<PlayerMovementSimple>());
             view.enabled = false;
+            //RPC_Die();
         }
     }
+    //[Rpc(RpcSources.All, RpcTargets.All)]
+    //private void RPC_PlayHitFX()
+    //{
+    //    particlesHit.Play();
+    //}
+    //[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    //private void RPC_Die()
+    //{
+    //    view.enabled = false;
+    //}
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
@@ -19,7 +19,7 @@ public class BasicPlayer : NetworkBehaviour
             return;
         }
         Cursor.lockState = CursorLockMode.Locked;
-        GameManager.instance.playerBasic.Add(this.gameObject);
+        //GameManager.instance.playerBasic.Add(this.gameObject);
         if (SingletonChoose.Instance.selectedMode == 1)
             GoHunter();
         else
@@ -40,11 +40,13 @@ public class BasicPlayer : NetworkBehaviour
             {
                 UIManager.instance.Pause(false);
                 Cursor.lockState = CursorLockMode.Locked;
+                pause = false;
             }
             else
             {
                 UIManager.instance.Pause(true);
                 Cursor.lockState = CursorLockMode.None;
+                pause = true;
             }
         }
         if(Runner.ActivePlayers.Count()==1)
@@ -77,6 +79,7 @@ public class BasicPlayer : NetworkBehaviour
     {
         RPC_ClientApplyHunter();
         RpcActiveHunterWait();
+        //GameManager.instance.RpcRegisterRole(false);
     }
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RpcActiveHunterWait()
@@ -88,12 +91,13 @@ public class BasicPlayer : NetworkBehaviour
     public void RPC_AddPlayer(BasicPlayer player)
     {
         RPC_ClientApplyPlayer();
-        Debug.Log("Entra RPDADDPLAYER3");
+        //Debug.Log("Entra RPDADDPLAYER3");
         player.gameObject.GetComponent<PlayerMovementSimple>().enabled = true;
         player.gameObject.GetComponent<Healt>().enabled = true;
         player.playerView.gameObject.SetActive(true);
         player.gameObject.GetComponent<Hunter>().enabled = false;
         player.hunterView.gameObject.SetActive(false);
+        //GameManager.instance.RpcRegisterRole(true);
     }
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_ClientApplyHunter()
@@ -109,6 +113,7 @@ public class BasicPlayer : NetworkBehaviour
         if (hp) hp.enabled = false;
 
         if (playerView) playerView.SetActive(false);
+        //GameManager.instance.RpcAddPlayer(false);
     }
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_ClientApplyPlayer()
@@ -126,6 +131,8 @@ public class BasicPlayer : NetworkBehaviour
         if (hunter) hunter.enabled = false;
 
         if (hunterView) hunterView.SetActive(false);
+
+        //GameManager.instance.RpcAddPlayer(true);
     }
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     private void RPC_RequestSync()

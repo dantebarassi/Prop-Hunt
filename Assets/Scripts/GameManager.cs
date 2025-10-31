@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
@@ -11,7 +11,7 @@ public class GameManager : NetworkBehaviour
     public List<GameObject> playerBasic = new();
     public Hunter hunter;
 
-    public int playersActive;
+    public int propsActive,huntersActive;
 
     //[Networked, OnChangedRender(nameof(StartGame))]
     public bool startGame { get; set; } = false;
@@ -25,7 +25,7 @@ public class GameManager : NetworkBehaviour
     public float timer { get; set; } = 0;
     [Networked, OnChangedRender(nameof(StartGame))]
     public int ContadorListos { get; set; } = 0;
-    public int kills { get; set; }
+    public int kills=0;
     void Awake()
     {
         if (instance == null)
@@ -68,11 +68,12 @@ public class GameManager : NetworkBehaviour
             startGame = true;
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RpcHunterGetKill()
     {
 
         kills++;
+        RecountTeams();
         RpcWhoWins();
 
     }
@@ -93,7 +94,7 @@ public class GameManager : NetworkBehaviour
     [Rpc]
     public void RpcWhoWins()
     {
-        if (kills >= Runner.ActivePlayers.Count() - 1)
+        if (kills >= propsActive && huntersActive >= 1 && propsActive >=1 && huntersActive+ propsActive >1)
             RpcSetVictoryScreen(true);
         if (hunterCan && !alreadyStartTime)
         {
@@ -110,8 +111,64 @@ public class GameManager : NetworkBehaviour
     {
         Debug.Log("EsperandoGanar");
         alreadyStartTime = true;
-        yield return new WaitForSeconds(30f);
+        yield return new WaitForSeconds(40f);
         Debug.Log("Gane");
         RpcSetVictoryScreen(false);
     }
+
+    private void RecountTeams()
+    {
+        propsActive = 0;
+        huntersActive = 0;
+
+        // agarra TODOS los BasicPlayer que estén en la escena
+        var players = FindObjectsOfType<BasicPlayer>();
+
+        foreach (var bp in players)
+        {
+            // si ese BasicPlayer tiene Hunter habilitado → hunter
+            var h = bp.GetComponent<Hunter>();
+            if (h != null && h.enabled)
+            {
+                huntersActive++;
+            }
+            else
+            {
+                // si no es hunter → lo contamos como prop
+                propsActive++;
+            }
+        }
+
+        Debug.Log($"RECOUNT -> props={propsActive} | hunters={huntersActive} | kills={kills}");
+    }
+
+    //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    //public void RpcRegisterRole(bool isProp)
+    //{
+    //    if (isProp)
+    //        propsActive++;
+    //    else
+    //        huntersActive++;
+    //
+    //    // ahora les mando a todos los números buenos
+    //    RpcSyncCounts(propsActive, huntersActive);
+    //}
+    //
+    //// server -> todos
+    //[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    //public void RpcSyncCounts(int props, int hunters)
+    //{
+    //    propsActive = props;
+    //    huntersActive = hunters;
+    //    //Debug.Log($"SYNC COUNTS -> props: {propsActive} | hunters: {huntersActive} | kills: {kills}");
+    //}
+
+    //[Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    //public void RpcAddPlayer(bool isProp)
+    //{
+    //    if (isProp)
+    //        propsActive++;
+    //    else
+    //        huntersActive++;
+    //}
 }

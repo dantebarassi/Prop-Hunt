@@ -152,6 +152,7 @@ MonoBehaviour:
   hunterView: {fileID: 1776370205575427447}
   playerView: {fileID: 2687705385401366657}
   CambioMiForma: 0
+  pause: 0
 --- !u!114 &6592391992201378771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,7 +160,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1756405043465260475}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12606dfe9e0199443b86ddd0036858c4, type: 3}
   m_Name: 
@@ -184,7 +185,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1756405043465260475}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 282aed1c858cac7438b40e4578c9e292, type: 3}
   m_Name: 
