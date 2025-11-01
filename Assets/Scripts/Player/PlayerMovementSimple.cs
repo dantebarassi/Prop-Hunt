@@ -78,6 +78,14 @@ public class PlayerMovementSimple : NetworkBehaviour
         Camera.main.GetComponentInParent<MouseLook>().myTarget = transform;
         Camera.main.GetComponentInParent<MouseLook>().enabled = true;
 
+        if (netId != 0)
+            StartCoroutine(ApplyFormNextFrame());
+
+    }
+    private IEnumerator ApplyFormNextFrame()
+    {
+        yield return null;
+        NetChangeForm();
     }
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     void ResyncNetworckValuesRpc()

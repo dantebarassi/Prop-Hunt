@@ -155,13 +155,7 @@ public class Hunter : NetworkBehaviour
         RpcCanMove();
 
     }
-    //[Rpc(RpcSources.All, RpcTargets.All)]
-    //public void RpcHunterGetKill()
-    //{
-    //
-    //    GameManager.instance.RpcHunterGetKill();
-    //        
-    //}
+
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RpcCanMove()
     {

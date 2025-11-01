@@ -121,12 +121,10 @@ public class GameManager : NetworkBehaviour
         propsActive = 0;
         huntersActive = 0;
 
-        // agarra TODOS los BasicPlayer que estén en la escena
         var players = FindObjectsOfType<BasicPlayer>();
 
         foreach (var bp in players)
         {
-            // si ese BasicPlayer tiene Hunter habilitado → hunter
             var h = bp.GetComponent<Hunter>();
             if (h != null && h.enabled)
             {
@@ -134,41 +132,9 @@ public class GameManager : NetworkBehaviour
             }
             else
             {
-                // si no es hunter → lo contamos como prop
                 propsActive++;
             }
         }
 
-        Debug.Log($"RECOUNT -> props={propsActive} | hunters={huntersActive} | kills={kills}");
     }
-
-    //[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    //public void RpcRegisterRole(bool isProp)
-    //{
-    //    if (isProp)
-    //        propsActive++;
-    //    else
-    //        huntersActive++;
-    //
-    //    // ahora les mando a todos los números buenos
-    //    RpcSyncCounts(propsActive, huntersActive);
-    //}
-    //
-    //// server -> todos
-    //[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    //public void RpcSyncCounts(int props, int hunters)
-    //{
-    //    propsActive = props;
-    //    huntersActive = hunters;
-    //    //Debug.Log($"SYNC COUNTS -> props: {propsActive} | hunters: {huntersActive} | kills: {kills}");
-    //}
-
-    //[Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    //public void RpcAddPlayer(bool isProp)
-    //{
-    //    if (isProp)
-    //        propsActive++;
-    //    else
-    //        huntersActive++;
-    //}
 }

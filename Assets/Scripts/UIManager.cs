@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _victoryMeshTMP;
     private GameObject _victoryTextObject;
     [SerializeField] Image _hunterWait;
-    [SerializeField] TextMeshProUGUI _hunterWaitTMP;
+    [SerializeField] TextMeshProUGUI _hunterWaitTMP, propsAliveText;
     [SerializeField] Button hunterButton;
     [SerializeField] Button playerButton;
     [SerializeField] GameObject pause, waitingOthers;
@@ -69,5 +69,9 @@ public class UIManager : MonoBehaviour
     public void WaitingOthers(bool isWaiting)
     {
         waitingOthers.SetActive(isWaiting);
+    }
+    public void ChangePropsAlive(int propsAlive, int cantProps)
+    {
+        propsAliveText.text = "Props Alive: " + propsAlive + "/" + cantProps;
     }
 }
