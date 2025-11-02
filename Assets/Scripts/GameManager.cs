@@ -26,6 +26,7 @@ public class GameManager : NetworkBehaviour
     [Networked, OnChangedRender(nameof(StartGame))]
     public int ContadorListos { get; set; } = 0;
     public int kills=0;
+    private bool _gameEnded = false;
     void Awake()
     {
         if (instance == null)
@@ -52,11 +53,11 @@ public class GameManager : NetworkBehaviour
     {
         return Objetos.GetValueOrDefault(Id);
     }
-    public void SetPlayerSpectating(PlayerMovementSimple playerMovementSimple)
-    {
-        FindObjectOfType<MouseLook>().SetSpectating();
-        playerMovementSimple.SetInputsAllowed(false);
-    }
+    //public void SetPlayerSpectating(PlayerMovementSimple playerMovementSimple)
+    //{
+    //    FindObjectOfType<MouseLook>().SetSpectating();
+    //    playerMovementSimple.SetInputsAllowed(false);
+    //}
     public void EstaListo()
     {
         ContadorListos++;
@@ -71,17 +72,17 @@ public class GameManager : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RpcHunterGetKill()
     {
-
         kills++;
         RecountTeams();
         RpcWhoWins();
 
     }
-    [Rpc(RpcSources.All, RpcTargets.All)]
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RpcHunterCanMove()
     {
 
         RpcWhoWins();
+        RecountTeams();
 
     }
     [Rpc(RpcSources.All, RpcTargets.All)]
@@ -94,8 +95,13 @@ public class GameManager : NetworkBehaviour
     [Rpc]
     public void RpcWhoWins()
     {
+        if (_gameEnded) return;
         if (kills >= propsActive && huntersActive >= 1 && propsActive >=1 && huntersActive+ propsActive >1)
+        {
+            _gameEnded = true;
             RpcSetVictoryScreen(true);
+
+        }
         if (hunterCan && !alreadyStartTime)
         {
             StartCoroutine(TimeToWinProps());
@@ -109,15 +115,19 @@ public class GameManager : NetworkBehaviour
 
     public IEnumerator TimeToWinProps()
     {
-        Debug.Log("EsperandoGanar");
         alreadyStartTime = true;
         yield return new WaitForSeconds(40f);
-        Debug.Log("Gane");
-        RpcSetVictoryScreen(false);
+        if (_gameEnded) yield break;
+        _gameEnded = true;
+        RecountTeams();
+        if (kills <= propsActive && huntersActive >= 1 && propsActive >= 1 && huntersActive + propsActive > 1)
+            RpcSetVictoryScreen(false);
     }
 
     private void RecountTeams()
     {
+        if (!Object.HasStateAuthority)
+            return;
         propsActive = 0;
         huntersActive = 0;
 
@@ -135,6 +145,11 @@ public class GameManager : NetworkBehaviour
                 propsActive++;
             }
         }
-
+        RpcUpdatePropsUI(propsActive - kills, propsActive);
+    }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RpcUpdatePropsUI(int alive, int total)
+    {
+        UIManager.instance.ChangePropsAlive(alive, total);
     }
 }

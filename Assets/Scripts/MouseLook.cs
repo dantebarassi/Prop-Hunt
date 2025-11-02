@@ -157,39 +157,66 @@ public class MouseLook : MonoBehaviour
     public void SetSpectating()
     {
         _spectating = true;
-        _spectatingList = new List<PlayerMovementSimple>(FindObjectsOfType<PlayerMovementSimple>());
+        RefreshSpectatingList();
+        if (_spectatingList.Count == 0)
+            return;
+        //_spectatingList = new List<PlayerMovementSimple>(FindObjectsOfType<PlayerMovementSimple>());
         myTarget = GetRandomSpectatingTarget();
+    }
+    private void RefreshSpectatingList()
+    {
+        _spectatingList = new List<PlayerMovementSimple>(FindObjectsOfType<PlayerMovementSimple>());
+
+        _spectatingList.RemoveAll(p => p == null || p.transform.childCount == 0);
     }
     private Transform GetRandomSpectatingTarget()
     {
-        if (_spectatingList.Count == 1)
+        RefreshSpectatingList();
+        if (_spectatingList.Count == 0)
         {
             return myTarget;
         }
+        if (_spectatingList.Count == 1)
+            return _spectatingList[0].transform.GetChild(0);
         //return _spectatingList.Find(x => x.transform.GetChild(0) != myTarget).transform.GetChild(0);
-        var p = _spectatingList.Find(x =>
-        x != null &&
-        x.transform.childCount > 0 &&
-        x.transform.GetChild(0) != myTarget
-    );
+        foreach (var p in _spectatingList)
+        {
+            if (p != null && p.transform.childCount > 0 && p.transform.GetChild(0) != myTarget)
+                return p.transform.GetChild(0);
+        }
 
-        return p != null ? p.transform.GetChild(0) : myTarget;
+        // si todos son el mismo, devuelvo el actual
+        return myTarget;
     }
     private Transform GetNextOrPrevSpectatingTarget(int to)
     {
-        int currentIndex = _spectatingList.IndexOf(myTarget.GetComponentInParent<PlayerMovementSimple>());
+        RefreshSpectatingList();
 
-        if (currentIndex + to >= _spectatingList.Count)
-        {
-            return _spectatingList[0].transform.GetChild(0);
-        }
-        else if (currentIndex + to < 0)
-        {
-            return _spectatingList[_spectatingList.Count - 1].transform.GetChild(0);
-        }
-        else
-        {
-            return _spectatingList[currentIndex + to].transform.GetChild(0);
-        }
+        if (_spectatingList.Count == 0)
+            return myTarget;
+        int currentIndex = _spectatingList.FindIndex(p =>
+        p != null &&
+        p.transform.childCount > 0 &&
+        p.transform.GetChild(0) == myTarget
+    );
+
+        // si no lo encontró, arranco del primero
+        if (currentIndex == -1)
+            currentIndex = 0;
+
+        int nextIndex = currentIndex + to;
+
+        if (nextIndex >= _spectatingList.Count)
+            nextIndex = 0;
+        else if (nextIndex < 0)
+            nextIndex = _spectatingList.Count - 1;
+
+        var nextPlayer = _spectatingList[nextIndex];
+
+        // última defensa
+        if (nextPlayer == null || nextPlayer.transform.childCount == 0)
+            return myTarget;
+
+        return nextPlayer.transform.GetChild(0);
     }
 }

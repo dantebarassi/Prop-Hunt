@@ -43,7 +43,8 @@ public class Healt : NetworkBehaviour
             }
 
             this.gameObject.GetComponent<PlayerMovementSimple>().transform.position = GameManager.instance.deadPlace.transform.position;
-
+            this.gameObject.GetComponent<PlayerMovementSimple>().SetInputsAllowed(false);
+            //GameManager.instance.SetPlayerSpectating(this.gameObject.GetComponent<PlayerMovementSimple>());
             view.enabled = false;
 
         }
