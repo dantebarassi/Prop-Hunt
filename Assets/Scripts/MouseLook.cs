@@ -185,7 +185,6 @@ public class MouseLook : MonoBehaviour
                 return p.transform.GetChild(0);
         }
 
-        // si todos son el mismo, devuelvo el actual
         return myTarget;
     }
     private Transform GetNextOrPrevSpectatingTarget(int to)
@@ -200,7 +199,6 @@ public class MouseLook : MonoBehaviour
         p.transform.GetChild(0) == myTarget
     );
 
-        // si no lo encontró, arranco del primero
         if (currentIndex == -1)
             currentIndex = 0;
 
@@ -213,7 +211,6 @@ public class MouseLook : MonoBehaviour
 
         var nextPlayer = _spectatingList[nextIndex];
 
-        // última defensa
         if (nextPlayer == null || nextPlayer.transform.childCount == 0)
             return myTarget;
 
